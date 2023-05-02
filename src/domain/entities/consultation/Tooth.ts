@@ -1,4 +1,4 @@
 export default interface Tooth {
-    number: number;
-    procedure: string;
+  number: number;
+  procedure: string;
 }
