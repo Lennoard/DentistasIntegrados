@@ -1,4 +1,4 @@
-export enum ConsultationStatus {
+export const enum ConsultationStatus {
   Canceled = -1,
   Requested = 0,
   Accepted = 1,
