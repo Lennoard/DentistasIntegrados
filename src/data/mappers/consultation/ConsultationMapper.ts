@@ -35,7 +35,7 @@ export default class ConsultationMapper
   map(source: ConsultationDTO): Consultation {
     return new Consultation(
       source.id,
-      this.patientMapper.map(source.patient),
+      source.patientId,
       this.odontogramMapper.map(source.odontogram),
       source.anamnesis.map((question) => this.questionMapper.map(question)),
       source.treatments.map((treatment) => this.treatmentMapper.map(treatment)),
@@ -47,14 +47,14 @@ export default class ConsultationMapper
 
   unmap(source: Consultation): ConsultationDTO {
     return {
-      id: "",
+      id: source.id,
       anamnesis: source.anamnesis.map((question) =>
         this.questionMapper.unmap(question)
       ),
       date: source.date.getTime(),
       mainComplaints: source.mainComplaints,
       odontogram: this.odontogramMapper.unmap(source.odontogram),
-      patient: this.patientMapper.unmap(source.patient),
+      patientId: source.patientId,
       status: source.status,
       treatments: source.treatments.map((treatments) =>
         this.treatmentMapper.unmap(treatments)

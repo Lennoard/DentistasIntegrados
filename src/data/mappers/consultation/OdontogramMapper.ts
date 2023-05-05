@@ -1,4 +1,3 @@
-import ToothMapper from "./ToothMapper";
 import IMapper from "../IMapper";
 import OdontogramDTO from "../../models/consultation/OdontogramDTO";
 import Odontogram from "../../../domain/entities/consultation/Odontogram";

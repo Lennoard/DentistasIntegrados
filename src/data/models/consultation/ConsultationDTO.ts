@@ -5,7 +5,7 @@ import TreatmentDTO from "./TreatmentDTO";
 
 export default interface ConsultationDTO {
   id: string;
-  patient: PatientDTO;
+  patientId: string;
   odontogram: OdontogramDTO;
   anamnesis: QuestionDTO[];
   treatments: TreatmentDTO[];

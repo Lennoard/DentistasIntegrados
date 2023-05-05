@@ -6,7 +6,7 @@ import { ConsultationStatus } from "../../ConsultationStatus";
 
 export default class Consultation {
   id: string;
-  patient: Patient;
+  patientId: string;
   odontogram: Odontogram;
   anamnesis: Question[];
   treatments: Treatment[];
@@ -16,7 +16,7 @@ export default class Consultation {
 
   constructor(
     id: string,
-    patient: Patient,
+    patientId: string,
     odontogram: Odontogram,
     anamnesis: Question[],
     treatments: Treatment[],
@@ -25,7 +25,7 @@ export default class Consultation {
     status: ConsultationStatus
   ) {
     this.id = id;
-    this.patient = patient;
+    this.patientId = patientId;
     this.odontogram = odontogram;
     this.anamnesis = anamnesis;
     this.treatments = treatments;
