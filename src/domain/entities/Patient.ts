@@ -2,6 +2,7 @@ import Address from "./Address";
 
 export default class Patient {
   id: string;
+  active: boolean;
   name: string;
   cpf: string;
   rg: string;
@@ -12,6 +13,7 @@ export default class Patient {
 
   constructor(
     id: string,
+    active: boolean,
     name: string,
     cpf: string,
     rg: string,
@@ -21,6 +23,7 @@ export default class Patient {
     address: Address
   ) {
     this.id = id;
+    this.active = active;
     this.name = name;
     this.cpf = cpf;
     this.rg = rg;

@@ -13,6 +13,7 @@ export default class PatientMapper implements IMapper<PatientDTO, Patient> {
   map(source: PatientDTO): Patient {
     return new Patient(
       source.id,
+      source.active,
       source.name,
       source.cpf,
       source.rg,
@@ -26,6 +27,7 @@ export default class PatientMapper implements IMapper<PatientDTO, Patient> {
   unmap(source: Patient): PatientDTO {
     return {
       id: source.id,
+      active: source.active,
       name: source.name,
       cpf: source.cpf,
       rg: source.rg,
