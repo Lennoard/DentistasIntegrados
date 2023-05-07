@@ -12,3 +12,4 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DENTISTAS_INTEGRADOS }}'
           projectId: dentistas-integrados
+          expires: 2d
