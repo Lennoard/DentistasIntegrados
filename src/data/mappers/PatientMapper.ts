@@ -1,14 +1,15 @@
+import "reflect-metadata";
 import IMapper from "./IMapper";
 import Patient from "../../domain/entities/Patient";
 import PatientDTO from "../models/PatientDTO";
 import AddressMapper from "./AddressMapper";
+import {inject, injectable} from "inversify";
+import DataTypes from "../di/DataTypes";
 
+@injectable()
 export default class PatientMapper implements IMapper<PatientDTO, Patient> {
-  private addressMapper: AddressMapper;
 
-  constructor(addressMapper: AddressMapper) {
-    this.addressMapper = addressMapper;
-  }
+  constructor(@inject(DataTypes.AddressMapper) private addressMapper: AddressMapper) { }
 
   map(source: PatientDTO): Patient {
     return new Patient(

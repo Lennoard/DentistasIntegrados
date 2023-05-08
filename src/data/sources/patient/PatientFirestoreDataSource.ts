@@ -1,44 +1,21 @@
-import { Auth } from "@firebase/auth";
-import {
-  deleteDoc,
-  Firestore,
-  QueryDocumentSnapshot,
-  setDoc,
-  UpdateData,
-} from "@firebase/firestore";
-import {
-  doc,
-  getDoc,
-  updateDoc,
-  getDocs,
-  collection,
-  where,
-  query,
-} from "firebase/firestore";
-import IFirestoreDataSource from "./IFirestoreDataSource";
-import FirestoreConverter from "./FirestoreConverter";
-import Patient from "../../domain/entities/Patient";
-import PatientMapper from "../mappers/PatientMapper";
-import PatientDTO from "../models/PatientDTO";
-
-interface PatientDataSource {
-  addPatient: (patient: Patient) => Promise<void>;
-  getPatient: (id: string) => Promise<Patient | null>;
-  getPatients: (active: boolean) => Promise<Patient[]>;
-}
+import {collection, doc, getDoc, getDocs, query, where,} from "firebase/firestore";
+import {Firestore, QueryDocumentSnapshot, setDoc} from "@firebase/firestore";
+import IFirestoreDataSource from "../IFirestoreDataSource";
+import FirestoreConverter from "../FirestoreConverter";
+import Patient from "../../../domain/entities/Patient";
+import PatientMapper from "../../mappers/PatientMapper";
+import PatientDTO from "../../models/PatientDTO";
+import * as firebaseAuth from "@firebase/auth";
+import PatientDataSource from "./PatientDataSource";
 
 export default class PatientFirestoreDataSource
   implements IFirestoreDataSource<PatientDTO>, PatientDataSource
 {
-  private auth: Auth;
-  private firestore: Firestore;
-  private patientMapper: PatientMapper;
-
-  constructor(auth: Auth, firestore: Firestore, mapper: PatientMapper) {
-    this.auth = auth;
-    this.firestore = firestore;
-    this.patientMapper = mapper;
-  }
+  constructor(
+    private auth: firebaseAuth.Auth,
+    private firestore: Firestore,
+    private patientMapper: PatientMapper
+  ) {}
 
   async addPatient(patient: Patient): Promise<void> {
     const docRef = this.getDocRef(patient.id);

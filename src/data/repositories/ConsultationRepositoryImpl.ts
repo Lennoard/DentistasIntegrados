@@ -1,14 +1,10 @@
 import ConsultationRepository from "../../domain/repositories/ConsultationRepository";
 import ConsultationFirestoreDataSource from "../sources/ConsultationFirestoreDataSource";
 import Consultation from "../../domain/entities/consultation/Consultation";
-import { ConsultationStatus } from "../../domain/ConsultationStatus";
+import {ConsultationStatus} from "../../domain/ConsultationStatus";
 
 export default class ConsultationRepositoryImpl implements ConsultationRepository {
-  private dataSource: ConsultationFirestoreDataSource;
-
-  constructor(dataSource: ConsultationFirestoreDataSource) {
-    this.dataSource = dataSource;
-  }
+  constructor(private dataSource: ConsultationFirestoreDataSource) {}
 
   async addConsultation(consultation: Consultation): Promise<void> {
     return await this.dataSource.addConsultation(consultation);

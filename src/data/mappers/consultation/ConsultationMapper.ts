@@ -1,36 +1,27 @@
-import PatientMapper from "../IMapper";
+import "reflect-metadata";
+import type PatientMapper from "../IMapper";
+import IMapper from "../IMapper";
 import OdontogramMapper from "./OdontogramMapper";
 import TreatmentMapper from "./TreatmentMapper";
-import IMapper from "../IMapper";
 import ConsultationDTO from "../../models/consultation/ConsultationDTO";
 import Consultation from "../../../domain/entities/consultation/Consultation";
 import PatientDTO from "../../models/PatientDTO";
 import Patient from "../../../domain/entities/Patient";
-import ToothMapper from "./ToothMapper";
 import QuestionMapper from "./QuestionMapper";
+import {inject, injectable} from "inversify";
+import DataTypes from "../../di/DataTypes";
 
+@injectable()
 export default class ConsultationMapper
   implements IMapper<ConsultationDTO, Consultation>
 {
-  private patientMapper: PatientMapper<PatientDTO, Patient>;
-  private odontogramMapper: OdontogramMapper;
-  private treatmentMapper: TreatmentMapper;
-  private questionMapper: QuestionMapper;
-  private toothMapper: ToothMapper;
 
   constructor(
-    patientMapper: IMapper<PatientDTO, Patient>,
-    odontogramMapper: OdontogramMapper,
-    treatmentMapper: TreatmentMapper,
-    questionMapper: QuestionMapper,
-    toothMapper: ToothMapper
-  ) {
-    this.patientMapper = patientMapper;
-    this.odontogramMapper = odontogramMapper;
-    this.treatmentMapper = treatmentMapper;
-    this.questionMapper = questionMapper;
-    this.toothMapper = toothMapper;
-  }
+    @inject(DataTypes.PatientMapper) private patientMapper: PatientMapper<PatientDTO, Patient>,
+    @inject(DataTypes.OdontogramMapper) private odontogramMapper: OdontogramMapper,
+    @inject(DataTypes.TreatmentMapper) private treatmentMapper: TreatmentMapper,
+    @inject(DataTypes.QuestionMapper) private questionMapper: QuestionMapper,
+  ) { }
 
   map(source: ConsultationDTO): Consultation {
     return new Consultation(

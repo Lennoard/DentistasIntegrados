@@ -1,48 +1,22 @@
 import ConsultationMapper from "../mappers/consultation/ConsultationMapper";
 import Consultation from "../../domain/entities/consultation/Consultation";
-import { ConsultationStatus } from "../../domain/ConsultationStatus";
-import { Auth } from "@firebase/auth";
-import {
-  deleteDoc,
-  Firestore,
-  QueryDocumentSnapshot,
-  setDoc,
-  UpdateData,
-} from "@firebase/firestore";
-import {
-  doc,
-  getDoc,
-  updateDoc,
-  getDocs,
-  collection,
-  where,
-  query,
-} from "firebase/firestore";
+import {ConsultationStatus} from "../../domain/ConsultationStatus";
+import * as firebaseAuth from "@firebase/auth";
+import {Firestore, QueryDocumentSnapshot, setDoc} from "@firebase/firestore";
+import {collection, doc, getDoc, getDocs, query, where,} from "firebase/firestore";
 import ConsultationDTO from "../models/consultation/ConsultationDTO";
 import IFirestoreDataSource from "./IFirestoreDataSource";
 import FirestoreConverter from "./FirestoreConverter";
-
-interface ConsultationDataSource {
-  addConsultation: (consultation: Consultation) => Promise<void>;
-  getConsultation: (id: string) => Promise<Consultation | null>;
-  getConsultations: (
-    patientId: string | null,
-    status: ConsultationStatus
-  ) => Promise<Consultation[]>;
-}
+import ConsultationDataSource from "./consultation/ConsultationDataSource";
 
 export default class ConsultationFirestoreDataSource
-  implements IFirestoreDataSource<ConsultationDTO>, ConsultationDataSource
-{
-  private auth: Auth;
-  private firestore: Firestore;
-  private consultationMapper: ConsultationMapper;
+  implements IFirestoreDataSource<ConsultationDTO>, ConsultationDataSource {
 
-  constructor(auth: Auth, firestore: Firestore, mapper: ConsultationMapper) {
-    this.auth = auth;
-    this.firestore = firestore;
-    this.consultationMapper = mapper;
-  }
+  constructor(
+    private auth: firebaseAuth.Auth,
+    private firestore: Firestore,
+    private consultationMapper: ConsultationMapper
+  ) {}
 
   async addConsultation(consultation: Consultation): Promise<void> {
     const docRef = this.getDocRef(consultation.id);

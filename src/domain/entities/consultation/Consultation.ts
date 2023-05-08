@@ -1,8 +1,7 @@
-import Patient from "../Patient";
 import Odontogram from "./Odontogram";
 import Question from "./Question";
 import Treatment from "./Treatment";
-import { ConsultationStatus } from "../../ConsultationStatus";
+import {ConsultationStatus} from "../../ConsultationStatus";
 
 export default class Consultation {
   id: string;

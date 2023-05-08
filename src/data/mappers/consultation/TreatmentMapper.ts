@@ -1,7 +1,11 @@
+import "reflect-metadata";
+import "reflect-metadata";
 import IMapper from "../IMapper";
 import TreatmentDTO from "../../models/consultation/TreatmentDTO";
 import Treatment from "../../../domain/entities/consultation/Treatment";
+import {injectable} from "inversify";
 
+@injectable()
 export default class TreatmentMapper implements IMapper<TreatmentDTO, Treatment> {
   map(source: TreatmentDTO): Treatment {
     return new Treatment(
