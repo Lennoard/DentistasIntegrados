@@ -1,13 +1,9 @@
 import PatientRepository from "../../domain/repositories/PatientRepository";
-import PatientFirestoreDataSource from "../sources/PatientFirestoreDataSource";
 import Patient from "../../domain/entities/Patient";
+import PatientDataSource from "../sources/patient/PatientFirestoreDataSource";
 
 export default class PatientRepositoryImpl implements PatientRepository {
-  private dataSource: PatientFirestoreDataSource;
-
-  constructor(dataSource: PatientFirestoreDataSource) {
-    this.dataSource = dataSource;
-  }
+  constructor(private dataSource: PatientDataSource) {}
 
   async addPatient(patient: Patient): Promise<void> {
     return await this.dataSource.addPatient(patient);

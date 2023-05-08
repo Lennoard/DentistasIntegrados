@@ -1,5 +1,4 @@
 export default class Address {
-  id: string;
   location: string;
   neighborhood: string;
   number: number;
@@ -8,7 +7,6 @@ export default class Address {
   country: string;
 
   constructor(
-    id: string,
     location: string,
     hood: string,
     number: number,
@@ -16,7 +14,6 @@ export default class Address {
     federationUnit: string,
     country: string
   ) {
-    this.id = id;
     this.location = location;
     this.neighborhood = hood;
     this.number = number;
