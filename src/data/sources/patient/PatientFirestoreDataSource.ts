@@ -5,16 +5,19 @@ import FirestoreConverter from "../FirestoreConverter";
 import Patient from "../../../domain/entities/Patient";
 import PatientMapper from "../../mappers/PatientMapper";
 import PatientDTO from "../../models/PatientDTO";
-import * as firebaseAuth from "@firebase/auth";
+import type {Auth} from "@firebase/auth";
 import PatientDataSource from "./PatientDataSource";
+import DataTypes from "../../di/DataTypes";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export default class PatientFirestoreDataSource
   implements IFirestoreDataSource<PatientDTO>, PatientDataSource
 {
   constructor(
-    private auth: firebaseAuth.Auth,
-    private firestore: Firestore,
-    private patientMapper: PatientMapper
+    @inject(DataTypes.Auth) private auth: Auth,
+    @inject(DataTypes.Firestore) private firestore: Firestore,
+    @inject(DataTypes.PatientMapper) private patientMapper: PatientMapper
   ) {}
 
   async addPatient(patient: Patient): Promise<void> {
@@ -46,7 +49,7 @@ export default class PatientFirestoreDataSource
   }
 
   getUid(): string {
-    return this.auth.currentUser!!.uid;
+    return this.auth.currentUser?.uid || "";
   }
 
   getConverter(): FirestoreConverter<PatientDTO> {

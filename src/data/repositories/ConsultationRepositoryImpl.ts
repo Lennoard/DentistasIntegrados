@@ -1,10 +1,18 @@
 import ConsultationRepository from "../../domain/repositories/ConsultationRepository";
-import ConsultationFirestoreDataSource from "../sources/ConsultationFirestoreDataSource";
+import ConsultationFirestoreDataSource from "../sources/consultation/ConsultationFirestoreDataSource";
 import Consultation from "../../domain/entities/consultation/Consultation";
-import {ConsultationStatus} from "../../domain/ConsultationStatus";
+import { ConsultationStatus } from "../../domain/ConsultationStatus";
+import { inject, injectable } from "inversify";
+import DataTypes from "../di/DataTypes";
 
-export default class ConsultationRepositoryImpl implements ConsultationRepository {
-  constructor(private dataSource: ConsultationFirestoreDataSource) {}
+@injectable()
+export default class ConsultationRepositoryImpl
+  implements ConsultationRepository
+{
+  constructor(
+    @inject(DataTypes.ConsultationDataSource)
+    private dataSource: ConsultationFirestoreDataSource
+  ) {}
 
   async addConsultation(consultation: Consultation): Promise<void> {
     return await this.dataSource.addConsultation(consultation);
