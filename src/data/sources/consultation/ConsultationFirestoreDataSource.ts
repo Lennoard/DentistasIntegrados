@@ -1,21 +1,24 @@
-import ConsultationMapper from "../mappers/consultation/ConsultationMapper";
-import Consultation from "../../domain/entities/consultation/Consultation";
-import {ConsultationStatus} from "../../domain/ConsultationStatus";
-import * as firebaseAuth from "@firebase/auth";
+import ConsultationMapper from "../../mappers/consultation/ConsultationMapper";
+import Consultation from "../../../domain/entities/consultation/Consultation";
+import {ConsultationStatus} from "../../../domain/ConsultationStatus";
+import type {Auth} from "@firebase/auth";
 import {Firestore, QueryDocumentSnapshot, setDoc} from "@firebase/firestore";
 import {collection, doc, getDoc, getDocs, query, where,} from "firebase/firestore";
-import ConsultationDTO from "../models/consultation/ConsultationDTO";
-import IFirestoreDataSource from "./IFirestoreDataSource";
-import FirestoreConverter from "./FirestoreConverter";
-import ConsultationDataSource from "./consultation/ConsultationDataSource";
+import ConsultationDTO from "../../models/consultation/ConsultationDTO";
+import IFirestoreDataSource from "../IFirestoreDataSource";
+import FirestoreConverter from "../FirestoreConverter";
+import ConsultationDataSource from "./ConsultationDataSource";
+import {inject, injectable} from "inversify";
+import DataTypes from "../../di/DataTypes";
 
+@injectable()
 export default class ConsultationFirestoreDataSource
   implements IFirestoreDataSource<ConsultationDTO>, ConsultationDataSource {
 
   constructor(
-    private auth: firebaseAuth.Auth,
-    private firestore: Firestore,
-    private consultationMapper: ConsultationMapper
+    @inject(DataTypes.Auth) private auth: Auth,
+    @inject(DataTypes.Firestore) private firestore: Firestore,
+    @inject(DataTypes.ConsultationMapper) private consultationMapper: ConsultationMapper
   ) {}
 
   async addConsultation(consultation: Consultation): Promise<void> {
@@ -38,7 +41,7 @@ export default class ConsultationFirestoreDataSource
     status: ConsultationStatus
   ): Promise<Consultation[]> {
     const consultations = new Array<Consultation>();
-    const statusFilter = where("status", "==", status);
+    const statusFilter = where("status", "==", status.valueOf());
     let q = query(this.getCollectionRef(), statusFilter);
 
     if (patientId != null) {
@@ -60,7 +63,7 @@ export default class ConsultationFirestoreDataSource
   }
 
   getUid(): string {
-    return this.auth.currentUser!!.uid;
+    return this.auth.currentUser?.uid || "";
   }
 
   getConverter(): FirestoreConverter<ConsultationDTO> {
@@ -86,5 +89,5 @@ export default class ConsultationFirestoreDataSource
     ).withConverter(this.getConverter());
   }
 
-  private COLLECTION_CONSULTATIONS = `users/${this.getUid()}/consultations`;
+  private COLLECTION_CONSULTATIONS = `consultations`;
 }
