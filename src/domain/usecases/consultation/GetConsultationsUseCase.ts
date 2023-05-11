@@ -1,6 +1,8 @@
 import { ConsultationStatus } from "../../ConsultationStatus";
 import Consultation from "../../entities/consultation/Consultation";
-import ConsultationRepository from "../../repositories/ConsultationRepository";
+import type ConsultationRepository from "../../repositories/ConsultationRepository";
+import { inject, injectable } from "inversify";
+import DataTypes from "../../../data/di/DataTypes";
 
 export default interface GetConsultationsUseCase {
   execute: (
@@ -9,12 +11,12 @@ export default interface GetConsultationsUseCase {
   ) => Promise<Consultation[]>;
 }
 
+@injectable()
 export class GetConsultationsUseCaseImpl implements GetConsultationsUseCase {
-  private repository: ConsultationRepository;
-
-  constructor(repository: ConsultationRepository) {
-    this.repository = repository;
-  }
+  constructor(
+    @inject(DataTypes.ConsultationRepository)
+    private repository: ConsultationRepository
+  ) {}
 
   execute(
     patientId: string | null,
