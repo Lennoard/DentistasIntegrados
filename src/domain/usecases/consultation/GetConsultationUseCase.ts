@@ -1,16 +1,18 @@
 import Consultation from "../../entities/consultation/Consultation";
-import ConsultationRepository from "../../repositories/ConsultationRepository";
+import type ConsultationRepository from "../../repositories/ConsultationRepository";
+import {inject, injectable} from "inversify";
+import DataTypes from "../../../data/di/DataTypes";
 
-export default interface GetConsultationsUseCase {
+export default interface GetConsultationUseCase {
   execute: (id: string) => Promise<Consultation | null>;
 }
 
-export class GetConsultationsUseCaseImpl implements GetConsultationsUseCase {
-  private repository: ConsultationRepository;
-
-  constructor(repository: ConsultationRepository) {
-    this.repository = repository;
-  }
+@injectable()
+export class GetConsultationUseCaseImpl implements GetConsultationUseCase {
+  constructor(
+    @inject(DataTypes.ConsultationRepository)
+    private repository: ConsultationRepository
+  ) {}
 
   execute(id: string): Promise<Consultation | null> {
     return this.repository.getConsultation(id);
