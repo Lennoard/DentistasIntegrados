@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css";
+import "./presentation/css/App.css";
 import {ThemeProvider} from "@mui/material/styles";
 import {appTheme} from "./presentation/theme/theme";
 import {Button, Typography} from "@mui/material";
