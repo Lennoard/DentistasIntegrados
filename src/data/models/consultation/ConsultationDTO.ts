@@ -1,4 +1,3 @@
-import PatientDTO from "../PatientDTO";
 import OdontogramDTO from "./OdontogramDTO";
 import QuestionDTO from "./QuestionDTO";
 import TreatmentDTO from "./TreatmentDTO";
