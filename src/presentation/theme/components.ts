@@ -1,10 +1,6 @@
 import {Components} from "@mui/material/styles/components";
 import {Theme} from "@mui/material/styles/createTheme";
-import {appPallet} from "./pallete";
-import {SimplePaletteColorOptions} from "@mui/material/styles/createPalette";
-
-const primaryMain = (appPallet.primary as SimplePaletteColorOptions).main
-const primaryDark = (appPallet.primary as SimplePaletteColorOptions).dark
+import {primaryDark, primaryMain} from "./pallete";
 
 export const appComponents: Components<Omit<Theme, 'components'>> = {
   MuiButton: {
