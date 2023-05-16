@@ -20,5 +20,14 @@ export const appComponents: Components<Omit<Theme, 'components'>> = {
         color: primaryDark
       }
     }
+  },
+  MuiOutlinedInput: {
+    styleOverrides: {
+      root: {
+        borderRadius: "32px",
+        paddingLeft: "8px",
+        paddingRight: "8px"
+      }
+    }
   }
 }
