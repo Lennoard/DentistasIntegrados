@@ -1,10 +1,8 @@
 import React from "react";
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { primaryDark } from "../../theme/pallete";
-import { useNavigate } from "react-router-dom";
 
 export default function SignUp(): JSX.Element {
-  const navigate = useNavigate();
   
   return (
     <Container>
