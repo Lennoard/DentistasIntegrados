@@ -1,13 +1,29 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import imagerySignIn from "./imagerySignIn.png";
 import logo from "./../../images/logo.png";
 import "./signin.css";
-import {Box, Container, Grid, Snackbar, SnackbarCloseReason, TextField, Typography,} from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Modal,
+  Snackbar,
+  SnackbarCloseReason,
+  TextField,
+  Typography,
+} from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import {primaryDark, primaryMain} from "../../theme/pallete";
+import { primaryDark, primaryMain } from "../../theme/pallete";
 import ToastMessage from "../../utils/ToastMessage";
-import {useNavigate} from "react-router-dom";
-import {Auth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup,} from "@firebase/auth";
+import { useNavigate } from "react-router-dom";
+import {
+  Auth,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  sendPasswordResetEmail,
+} from "@firebase/auth";
 import showLocalizedAuthError from "../../../utils/auth/AuthError";
 import container from "../../../config/inversify.config";
 import DataTypes from "../../../data/di/DataTypes";
@@ -16,9 +32,23 @@ import GoogleSignInButton from "../../components/GoogleSignInButton";
 const auth = container.get<Auth>(DataTypes.Auth);
 const HOME_ROUTE = "/home";
 
+const dialogStyle = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  borderRadius: "16px",
+  width: "30%",
+  minWidth: "400px",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+};
+
 interface AuthCredential {
   email: string;
   password: string;
+  recoveryEmail: string;
 }
 
 export default function SignIn(): JSX.Element {
@@ -26,15 +56,18 @@ export default function SignIn(): JSX.Element {
   const [credentials, setCredentials] = useState<AuthCredential>({
     email: "",
     password: "",
+    recoveryEmail: "",
   });
   const [toast, setToast] = useState<ToastMessage>({
     showing: false,
     message: "Falha ao fazer login",
   });
   const [loading, setLoading] = useState(false);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passRef = useRef<HTMLInputElement>(null);
   const [editingInPass, setEditingInPass] = useState(false);
+  const [openPasswordResetModal, setPasswordResetModalOpen] = useState(false);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const recoverEmailRef = useRef<HTMLInputElement>(null);
+  const passRef = useRef<HTMLInputElement>(null);
 
   const handleToastClose = (
     _: Event | React.SyntheticEvent<any, Event>,
@@ -103,6 +136,68 @@ export default function SignIn(): JSX.Element {
 
   return (
     <Container fixed disableGutters={true}>
+      <Modal
+        open={openPasswordResetModal}
+        onClose={() => setPasswordResetModalOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={dialogStyle} textAlign="center">
+          <Typography id="modal-modal-title" variant="h4">
+            Esqueceu sua senha?
+          </Typography>
+          <Typography
+            id="modal-modal-description"
+            variant="subtitle1"
+            sx={{ mt: 2 }}
+          >
+            Digite seu e-mail cadastrado no campo abaixo para receber um e-mail
+            de reuperação de senha e escolher uma nova.
+          </Typography>
+          <TextField
+            key="email"
+            type="email"
+            label="Email"
+            margin="dense"
+            fullWidth={true}
+            sx={{ marginY: "24px" }}
+            inputRef={recoverEmailRef}
+            value={credentials.recoveryEmail}
+            onChange={(event) => {
+              setCredentials({
+                ...credentials,
+                recoveryEmail: event.target.value,
+              });
+            }}
+          />
+          <Typography variant="body2" sx={{ mt: 2 }}>
+            *Lembre-se de verificar sua caixa de spam, caso não receba o e-mail
+          </Typography>
+
+          <Button
+            variant="contained"
+            sx={{ minWidth: "120px", margin: "36px auto 8px auto" }}
+            onClick={(_) => {
+              sendPasswordResetEmail(auth, credentials.recoveryEmail)
+                .then(() => {
+                  setToast({
+                    showing: true,
+                    message: "Email de recuperação enviado!",
+                  });
+                  setPasswordResetModalOpen(false);
+                })
+                .catch((e) => {
+                  setToast({
+                    showing: true,
+                    message: `Falha ao enviar email: ${showLocalizedAuthError(e.mes)}`,
+                  });
+                });
+            }}
+          >
+            Enviar
+          </Button>
+        </Box>
+      </Modal>
       <Grid container rowSpacing={1} columnSpacing={4}>
         <Grid
           id="left"
@@ -226,6 +321,7 @@ export default function SignIn(): JSX.Element {
               margin="32px 16px"
               variant="body2"
               textAlign="center"
+              onClick={(_: any) => setPasswordResetModalOpen(true)}
               sx={{
                 cursor: "pointer",
                 margin: "32px auto",
@@ -256,6 +352,7 @@ export default function SignIn(): JSX.Element {
                 variant="body2"
                 marginLeft="4px"
                 sx={{ cursor: "pointer" }}
+                onClick={(_) => navigate("/cadastro")}
               >
                 Inscreva-se
               </Typography>
