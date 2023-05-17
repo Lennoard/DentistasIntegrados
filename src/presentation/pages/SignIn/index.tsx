@@ -132,7 +132,7 @@ export default function SignIn(): JSX.Element {
     } else {
       passRef.current?.focus();
     }
-  }, []);
+  });
 
   return (
     <Container fixed disableGutters={true}>
