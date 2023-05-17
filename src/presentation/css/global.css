@@ -2,3 +2,27 @@ body {
   color: rgba(0, 0, 0, 0.87);
   background-color: #fafafa;
 }
+
+.MuiInputBase-root fieldset {
+  border-width: 2px;
+  border-color: #badefe;
+}
+
+.moving-text:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .moving-text {
+    animation: marquee 5s linear infinite;
+  }
+}

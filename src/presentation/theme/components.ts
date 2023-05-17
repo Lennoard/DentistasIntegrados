@@ -1,8 +1,8 @@
-import {Components} from "@mui/material/styles/components";
-import {Theme} from "@mui/material/styles/createTheme";
-import {primaryDark, primaryMain} from "./pallete";
+import { Components } from "@mui/material/styles/components";
+import { Theme } from "@mui/material/styles/createTheme";
+import { primaryDark, primaryMain } from "./pallete";
 
-export const appComponents: Components<Omit<Theme, 'components'>> = {
+export const appComponents: Components<Omit<Theme, "components">> = {
   MuiButton: {
     styleOverrides: {
       root: {
@@ -10,16 +10,17 @@ export const appComponents: Components<Omit<Theme, 'components'>> = {
         borderRadius: "24px",
       },
       contained: {
-        background: `linear-gradient(to right, ${primaryDark}, ${primaryMain})`
+        background: `linear-gradient(to right, ${primaryDark}, ${primaryMain})`,
       },
       outlined: {
-        borderColor: primaryDark,
-        color: primaryDark
+        borderColor: "#E2F2FE",
+        borderWidth: "2px",
+        color: primaryDark,
       },
       text: {
-        color: primaryDark
-      }
-    }
+        color: primaryDark,
+      },
+    },
   },
   MuiOutlinedInput: {
     styleOverrides: {
@@ -27,7 +28,7 @@ export const appComponents: Components<Omit<Theme, 'components'>> = {
         borderRadius: "32px",
         paddingLeft: "8px",
         paddingRight: "8px"
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
