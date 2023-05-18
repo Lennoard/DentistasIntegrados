@@ -219,7 +219,7 @@ export default function SignIn(): JSX.Element {
             >
               Dentistas Integrados
             </Typography>
-            <img width="48px" height="55px" src={logo} alt="Logo" />
+            <img width="50px" height="52px" src={logo} alt="Logo" />
           </Box>
           <img id="app-logo" src={imagerySignIn} alt="Ilustração" />
         </Grid>

@@ -1,0 +1,35 @@
+#app-logo {
+  max-width: 100%;
+  height: calc(100% - 64px);
+  margin-top: 64px;
+}
+
+#left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+}
+
+#right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+}
+
+#sign-in-button {
+  margin-top: 32px;
+}
+
+#google-sign-in-button {
+  margin-top: 32px;
+  margin-left: 16px;
+}
+
+.signInDecorator {
+  background: #0144A9;
+  height: 3px;
+  flex-grow: 1;
+}
