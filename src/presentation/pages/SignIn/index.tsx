@@ -210,7 +210,7 @@ export default function SignIn(): JSX.Element {
             xs: "none!important",
           }}
         >
-          <Box display="flex" flexDirection="row">
+          <Box display="flex" flexDirection="row" alignItems="center" >
             <Typography
               marginY="16px"
               variant="h5"
@@ -233,6 +233,8 @@ export default function SignIn(): JSX.Element {
         >
           <Box
             flexDirection="row"
+            justifyContent="center"
+            alignItems="center" 
             display={{
               md: "none!important",
               sm: "flex!important",

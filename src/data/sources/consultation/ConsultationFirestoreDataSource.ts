@@ -23,7 +23,8 @@ export default class ConsultationFirestoreDataSource
 
   async addConsultation(consultation: Consultation): Promise<void> {
     const docRef = this.getDocRef(consultation.id);
-    return await setDoc(docRef, this.consultationMapper.unmap(consultation));
+    const { id: _, ...dto } = this.consultationMapper.unmap(consultation);
+    return await setDoc(docRef, dto);
   }
 
   async getConsultation(id: string): Promise<Consultation | null> {

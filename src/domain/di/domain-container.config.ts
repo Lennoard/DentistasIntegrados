@@ -6,6 +6,7 @@ import GetConsultationUseCase, {GetConsultationUseCaseImpl} from "../usecases/co
 import AddPatientUseCase, {AddPatientUseCaseImpl} from "../usecases/patient/AddPatientUseCase";
 import GetPatientsUseCase, {GetPatientsUseCaseImpl} from "../usecases/patient/GetPatientsUseCase";
 import GetPatientUseCase, {GetPatientUseCaseImpl} from "../usecases/patient/GetPatientUseCase";
+import CreateAccountUseCase, { CreateAccountUseCaseImpl } from "../usecases/CreateAccountUseCase";
 
 const domainContainer = new Container();
 
@@ -13,6 +14,7 @@ const domainContainer = new Container();
 domainContainer.bind<AddConsultationUseCase>(DomainTypes.AddConsultationUseCase).to(AddConsultationUseCaseImpl);
 domainContainer.bind<GetConsultationsUseCase>(DomainTypes.GetConsultationsUseCase).to(GetConsultationsUseCaseImpl);
 domainContainer.bind<GetConsultationUseCase>(DomainTypes.GetConsultationUseCase).to(GetConsultationUseCaseImpl);
+domainContainer.bind<CreateAccountUseCase>(DomainTypes.CreateAccountUseCase).to(CreateAccountUseCaseImpl);
 domainContainer.bind<AddPatientUseCase>(DomainTypes.AddPatientUseCase).to(AddPatientUseCaseImpl);
 domainContainer.bind<GetPatientsUseCase>(DomainTypes.GetPatientsUseCase).to(GetPatientsUseCaseImpl);
 domainContainer.bind<GetPatientUseCase>(DomainTypes.GetPatientUseCase).to(GetPatientUseCaseImpl);

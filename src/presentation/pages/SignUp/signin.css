@@ -18,18 +18,3 @@
   justify-content: center;
   height: 100vh;
 }
-
-#sign-in-button {
-  margin-top: 32px;
-}
-
-#google-sign-in-button {
-  margin-top: 32px;
-  margin-left: 16px;
-}
-
-.signInDecorator {
-  background: #0144A9;
-  height: 3px;
-  flex-grow: 1;
-}

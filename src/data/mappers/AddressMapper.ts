@@ -5,8 +5,10 @@ import Address from "../../domain/entities/Address";
 import {injectable} from "inversify";
 
 @injectable()
-export default class AddressMapper implements IMapper<AddressDTO, Address> {
-  map(source: AddressDTO): Address {
+export default class AddressMapper implements IMapper<AddressDTO | null, Address | null> {
+  map(source: AddressDTO | null): Address | null {
+    if (!source) return null;
+
     return new Address(
       source.location,
       source.neighborhood,
@@ -17,7 +19,8 @@ export default class AddressMapper implements IMapper<AddressDTO, Address> {
     );
   }
 
-  unmap(source: Address): AddressDTO {
+  unmap(source: Address | null): AddressDTO | null {
+    if (!source) return null;
     return source
   }
 }

@@ -5,6 +5,7 @@ const DomainTypes = {
   GetConsultationUseCase: Symbol("GetConsultationUseCase"),
 
   // Use cases
+  CreateAccountUseCase: Symbol("CreateAccountUseCase"),
   AddPatientUseCase: Symbol("AddPatientUseCase"),
   GetPatientsUseCase: Symbol("GetPatientsUseCase"),
   GetPatientUseCase: Symbol("GetPatientUseCase"),

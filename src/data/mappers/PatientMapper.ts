@@ -15,6 +15,7 @@ export default class PatientMapper implements IMapper<PatientDTO, Patient> {
     return new Patient(
       source.id,
       source.active,
+      source.completedRegistration,
       source.name,
       source.cpf,
       source.rg,
@@ -29,6 +30,7 @@ export default class PatientMapper implements IMapper<PatientDTO, Patient> {
     return {
       id: source.id,
       active: source.active,
+      completedRegistration: source.completedRegistration,
       name: source.name,
       cpf: source.cpf,
       rg: source.rg,
