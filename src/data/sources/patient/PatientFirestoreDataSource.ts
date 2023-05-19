@@ -22,7 +22,8 @@ export default class PatientFirestoreDataSource
 
   async addPatient(patient: Patient): Promise<void> {
     const docRef = this.getDocRef(patient.id);
-    return await setDoc(docRef, this.patientMapper.unmap(patient));
+    const { id: _, ...dto } = this.patientMapper.unmap(patient);
+    return await setDoc(docRef, dto);
   }
 
   async getPatient(id: string): Promise<Patient | null> {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import imagerySignIn from "./imagerySignIn.png";
 import logo from "./../../images/logo.png";
 import "./signin.css";
@@ -15,15 +15,12 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { primaryDark } from "../../theme/pallete";
 import ToastMessage from "../../utils/ToastMessage";
 import { useNavigate } from "react-router-dom";
-import {
-  Auth,
-  createUserWithEmailAndPassword,
-} from "@firebase/auth";
 import showLocalizedAuthError from "../../../utils/auth/AuthError";
 import container from "../../../config/inversify.config";
-import DataTypes from "../../../data/di/DataTypes";
+import DomainTypes from "../../../domain/di/DomainTypes";
+import CreateAccountUseCase from "../../../domain/usecases/CreateAccountUseCase";
 
-const auth = container.get<Auth>(DataTypes.Auth);
+const createAccountUseCase = container.get<CreateAccountUseCase>(DomainTypes.CreateAccountUseCase);
 const HOME_ROUTE = "/home";
 
 interface SignUpData {
@@ -46,7 +43,6 @@ export default function SignIn(): JSX.Element {
     message: "Falha ao realizar cadastro",
   });
   const [loading, setLoading] = useState(false);
-  const [editingInPass, setEditingInPass] = useState(false);
 
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -69,24 +65,29 @@ export default function SignIn(): JSX.Element {
     const pass2 = credentials.passwordConfirmation;
 
     if (pass !== pass2) {
-      setToast({ showing: true, message: "As senhas não correspondem" })
+      setToast({ showing: true, message: "As senhas não correspondem" });
       return;
     }
 
     setLoading(true);
 
-    const user = await performUserCreation(credentials.email, pass);
+    const user = await performUserCreation(credentials.name, credentials.email, pass);
 
     if (user) {
       setLoading(false);
       navigate(HOME_ROUTE);
+    } else {
+      setToast({
+        showing: true,
+        message: "Falha ao criar usuário",
+      });
     }
   };
 
-  const performUserCreation = async (email: string, password: string) => {
+  const performUserCreation = async (name: string, email: string, password: string) => {
     try {
-      const { user } = await createUserWithEmailAndPassword(
-        auth,
+      const user = await createAccountUseCase.execute(
+        name,
         email,
         password
       );
@@ -100,14 +101,6 @@ export default function SignIn(): JSX.Element {
       return null;
     }
   };
-
-  useEffect(() => {
-    if (!editingInPass) {
-      emailRef.current?.focus();
-    } else {
-      passRef.current?.focus();
-    }
-  });
 
   return (
     <Container fixed disableGutters={true}>
@@ -123,7 +116,7 @@ export default function SignIn(): JSX.Element {
             xs: "none!important",
           }}
         >
-          <Box display="flex" flexDirection="row">
+          <Box display="flex" flexDirection="row" alignItems="center" >
             <Typography
               marginY="16px"
               variant="h5"
@@ -146,6 +139,8 @@ export default function SignIn(): JSX.Element {
         >
           <Box
             flexDirection="row"
+            justifyContent="center"
+            alignItems="center" 
             display={{
               md: "none!important",
               sm: "flex!important",
@@ -167,7 +162,7 @@ export default function SignIn(): JSX.Element {
             Cadastro
           </Typography>
 
-          <Box display="flex" flexDirection="column" marginTop={4} >
+          <Box display="flex" flexDirection="column" marginTop={4}>
             <TextField
               key="name"
               type="text"
@@ -176,7 +171,6 @@ export default function SignIn(): JSX.Element {
               inputRef={nameRef}
               value={credentials.name}
               onChange={(event) => {
-                setEditingInPass(false);
                 setCredentials({ ...credentials, name: event.target.value });
               }}
               required
@@ -189,10 +183,9 @@ export default function SignIn(): JSX.Element {
               margin="dense"
               inputRef={emailRef}
               value={credentials.email}
-              onChange={(event) => {
-                setEditingInPass(false);
-                setCredentials({ ...credentials, email: event.target.value });
-              }}
+              onChange={(event) =>
+                setCredentials({ ...credentials, email: event.target.value })
+              }
               onKeyPress={(event) => {
                 if (event.key === "Enter") {
                   handleSignUpClick(null);
@@ -209,7 +202,6 @@ export default function SignIn(): JSX.Element {
               margin="dense"
               value={credentials.password}
               onChange={(event) => {
-                setEditingInPass(true);
                 setCredentials({
                   ...credentials,
                   password: event.target.value,
@@ -226,7 +218,6 @@ export default function SignIn(): JSX.Element {
               margin="dense"
               value={credentials.passwordConfirmation}
               onChange={(event) => {
-                setEditingInPass(true);
                 setCredentials({
                   ...credentials,
                   passwordConfirmation: event.target.value,
