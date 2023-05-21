@@ -76,11 +76,6 @@ export default function SignIn(): JSX.Element {
     if (user) {
       setLoading(false);
       navigate(HOME_ROUTE);
-    } else {
-      setToast({
-        showing: true,
-        message: "Falha ao criar usuário",
-      });
     }
   };
 

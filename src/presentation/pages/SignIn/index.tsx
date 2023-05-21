@@ -22,12 +22,18 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
+  getAdditionalUserInfo,
   sendPasswordResetEmail,
+  User,
 } from "@firebase/auth";
 import showLocalizedAuthError from "../../../utils/auth/AuthError";
 import container from "../../../config/inversify.config";
 import DataTypes from "../../../data/di/DataTypes";
 import GoogleSignInButton from "../../components/GoogleSignInButton";
+import DomainTypes from "../../../domain/di/DomainTypes";
+import { AdditionalUserInfo } from "@firebase/auth";
+import AddPatientUseCase from "../../../domain/usecases/patient/AddPatientUseCase";
+import Patient from "../../../domain/entities/Patient";
 
 const auth = container.get<Auth>(DataTypes.Auth);
 const HOME_ROUTE = "/home";
@@ -69,6 +75,8 @@ export default function SignIn(): JSX.Element {
   const recoverEmailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
 
+  const addPatientUseCase = container.get<AddPatientUseCase>(DomainTypes.AddPatientUseCase);
+
   const handleToastClose = (
     _: Event | React.SyntheticEvent<any, Event>,
     reason: SnackbarCloseReason
@@ -94,13 +102,40 @@ export default function SignIn(): JSX.Element {
     }
   };
 
+  const handleSignUp = async (user: User, userInfo: AdditionalUserInfo | null) => {
+    const name = (userInfo?.username || user.displayName) || "Nome não encontrado";
+    const patient = new Patient(
+      user.uid,
+      true,
+      false,
+      name,
+      "",
+      "",
+      "",
+      user.email || "",
+      new Date(),
+      null
+    );
+
+    await addPatientUseCase.execute(patient);
+    setLoading(false);
+    navigate(HOME_ROUTE);
+  }
+
   const performGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      const { user } = await signInWithPopup(auth, provider);
+      const credential = await signInWithPopup(auth, provider);
+      const user = credential.user;
+      const userInfo = getAdditionalUserInfo(credential);
+      
       if (user) {
-        setLoading(false);
-        navigate(HOME_ROUTE);
+        if (userInfo?.isNewUser) {
+          await handleSignUp(user, userInfo);
+        } else {
+          setLoading(false);
+          navigate(HOME_ROUTE);
+        }
       }
     } catch (error: any) {
       setToast({
