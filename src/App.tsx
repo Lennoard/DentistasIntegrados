@@ -1,4 +1,3 @@
-import React from "react";
 import "./presentation/css/global.css";
 import { ThemeProvider } from "@mui/material/styles";
 import { appTheme } from "./presentation/theme/theme";
