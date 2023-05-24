@@ -11,6 +11,21 @@ body {
   background-image: url(images/l1.jpeg);
 }
 
+.l2 {
+  height: 600px;
+  width: 100%;
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  background-image: url(images/l2.jpeg);
+}
+
+@media only screen and (max-width: 900px) {
+  .l2 {
+    height: 800px;
+  }
+}
+
 ul {
   list-style-type: none;
   padding-inline-start: 0;
