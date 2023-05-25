@@ -1,0 +1,29 @@
+.drawerListItem {
+  text-align: center;
+  border-radius: 32px !important;
+  background-color: #0144a9 !important;
+  margin: 0 16px 16px 16px !important;
+  width: 90% !important;
+  min-height: 64px;
+  transition: 250ms!important;
+}
+
+.drawerListItem:hover {
+  background-color: #0163C8 !important;
+}
+
+.drawerListItem.selected {
+  background-color: #013787 !important;
+  border: 3px solid #BADEFE;
+}
+
+.drawerListItem.selected > div,
+.drawerListItem.selected > div > span {
+  font-weight: 700;
+}
+
+.drawerListItem > div,
+.drawerListItem > div > span {
+  color: white !important;
+  text-align: center;
+}
