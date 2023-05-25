@@ -1,25 +1,19 @@
-import { Box, Container, Typography } from "@mui/material";
-import { primaryDark } from "../../theme/pallete";
+import { Container, Grid, Typography } from "@mui/material";
+import AppDrawer from "../../components/AppDrawer";
 
 export default function Home(): JSX.Element {
   return (
-    <Container>
-      <Box
-        sx={{
-          height: "100vh",
-          flexDirection: "column",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Typography className="moving-text" variant="h1" color={primaryDark}>
-          Home!
-        </Typography>
-        <Typography className="moving-text" variant="subtitle1">
-          Em andamento!
-        </Typography>
-      </Box>
-    </Container>
+    <AppDrawer title="Home" selectedIndex={0}>
+      <Container>
+        <Grid container spacing={4} rowSpacing={3}>
+          <Grid item xs={12}>
+            <Typography variant="h6">Home</Typography>
+            <Typography className="moving-text" variant="subtitle1">
+              Em andamento!
+            </Typography>
+          </Grid>
+        </Grid>
+      </Container>
+    </AppDrawer>
   );
 }

@@ -18,6 +18,8 @@ import fred from "./images/fred.png";
 import logo from "./images/logo2.jpeg";
 
 export default function LandingPage(): JSX.Element {
+  document.body.style.background = "#e9e9e9";
+
   return (
     <Container disableGutters>
       <Splash />
@@ -260,9 +262,9 @@ const Feedbacks = (): JSX.Element => {
           justifyContent="space-between"
         >
           <Typography textAlign="justify" color="white" variant="subtitle1">
-            Curabitur mattis sit amet tortor at hendrerit. Lorem ipsum dolor sit
-            amet, consectetur adipiscing elit. Aenean venenatis dui in dui
-            gravida pretium.
+            Eu simplesmente amei! Além do atendimento excelente de todos os
+            funcionários, Dra. Nathália trouxe o meu sorriso de volta. O
+            tratamento realmente devolveu minha autoestima.
           </Typography>
           <Typography
             textAlign="center"
@@ -295,10 +297,9 @@ const Feedbacks = (): JSX.Element => {
           justifyContent="space-between"
         >
           <Typography textAlign="justify" color="white" variant="subtitle1">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-            gravida quam maximus massa rutrum, eget vehicula est semper.
-            Curabitur nec augue eleifend, mollis lectus sit amet, vulputate
-            magna.
+            Excelentes profissionais! Me deixaram segura e foram super atenciosos
+            no meu atendimento. Super indico para tratamento de canal, acredito
+            que não tenha melhor!
           </Typography>
           <Typography
             textAlign="center"
@@ -306,7 +307,7 @@ const Feedbacks = (): JSX.Element => {
             variant="h5"
             marginTop="48px"
           >
-            Thaís frade
+            Thaís Monteiro
           </Typography>
         </Box>
       </Grid>
@@ -331,8 +332,9 @@ const Feedbacks = (): JSX.Element => {
           justifyContent="space-between"
         >
           <Typography textAlign="justify" color="white" variant="subtitle1">
-            Nullam non diam tincidunt, dapibus turpis in, finibus nisl. Cras ac
-            enim dictum, pretium tortor ut, iaculis felis.
+            Sou paciente há anos da clínica, posso dizer que são excelentes
+            profissionais nos quais confio muito. Sempre fui muito bem atendido
+            por todos.
           </Typography>
           <Typography
             textAlign="center"
