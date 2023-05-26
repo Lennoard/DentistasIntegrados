@@ -21,6 +21,13 @@ export default class AddressMapper implements IMapper<AddressDTO | null, Address
 
   unmap(source: Address | null): AddressDTO | null {
     if (!source) return null;
-    return source
+    return {
+      location: source.location,
+      neighborhood: source.neighborhood,
+      number: Number(source.number),
+      city: source.city,
+      federationUnit: source.federationUnit,
+      country: source.country,
+    } as AddressDTO
   }
 }

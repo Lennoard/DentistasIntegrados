@@ -15,6 +15,10 @@ export default class PatientRepositoryImpl implements PatientRepository {
     return await this.dataSource.addPatient(patient);
   }
 
+  async updatePatient(patient: Patient): Promise<void> {
+    return await this.dataSource.updatePatient(patient);
+  }
+
   async getPatient(id: string): Promise<Patient | null> {
     return await this.dataSource.getPatient(id);
   }

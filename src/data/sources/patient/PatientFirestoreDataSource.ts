@@ -1,14 +1,14 @@
-import {collection, doc, getDoc, getDocs, query, where,} from "firebase/firestore";
-import {Firestore, QueryDocumentSnapshot, setDoc} from "@firebase/firestore";
-import IFirestoreDataSource from "../IFirestoreDataSource";
-import FirestoreConverter from "../FirestoreConverter";
+import type { Auth } from "@firebase/auth";
+import { Firestore, QueryDocumentSnapshot, setDoc } from "@firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, updateDoc, where, } from "firebase/firestore";
+import { inject, injectable } from "inversify";
 import Patient from "../../../domain/entities/Patient";
+import DataTypes from "../../di/DataTypes";
 import PatientMapper from "../../mappers/PatientMapper";
 import PatientDTO from "../../models/PatientDTO";
-import type {Auth} from "@firebase/auth";
+import FirestoreConverter from "../FirestoreConverter";
+import IFirestoreDataSource from "../IFirestoreDataSource";
 import PatientDataSource from "./PatientDataSource";
-import DataTypes from "../../di/DataTypes";
-import {inject, injectable} from "inversify";
 
 @injectable()
 export default class PatientFirestoreDataSource
@@ -24,6 +24,12 @@ export default class PatientFirestoreDataSource
     const docRef = this.getDocRef(patient.id);
     const { id: _, ...dto } = this.patientMapper.unmap(patient);
     return await setDoc(docRef, dto);
+  }
+
+  async updatePatient(patient: Patient): Promise<void> {
+    const docRef = this.getDocRef(patient.id);
+    const { id: _, ...dto } = this.patientMapper.unmap(patient);
+    return await updateDoc(docRef, dto);
   }
 
   async getPatient(id: string): Promise<Patient | null> {

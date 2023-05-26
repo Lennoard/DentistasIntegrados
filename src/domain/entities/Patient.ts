@@ -1,3 +1,4 @@
+import { Gender } from "../Gender";
 import Address from "./Address";
 
 export default class Patient {
@@ -9,6 +10,7 @@ export default class Patient {
     public cpf: string,
     public rg: string,
     public phoneNumber: string,
+    public gender: Gender,
     public email: string,
     public birthDate: Date,
     public address: Address | null

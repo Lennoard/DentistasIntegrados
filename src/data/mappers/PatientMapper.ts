@@ -20,6 +20,7 @@ export default class PatientMapper implements IMapper<PatientDTO, Patient> {
       source.cpf,
       source.rg,
       source.phoneNumber,
+      source.gender,
       source.email,
       new Date(source.birthDate),
       this.addressMapper.map(source.address)
@@ -27,6 +28,7 @@ export default class PatientMapper implements IMapper<PatientDTO, Patient> {
   }
 
   unmap(source: Patient): PatientDTO {
+    const birthDate = source.birthDate.getTime();
     return {
       id: source.id,
       active: source.active,
@@ -35,8 +37,9 @@ export default class PatientMapper implements IMapper<PatientDTO, Patient> {
       cpf: source.cpf,
       rg: source.rg,
       phoneNumber: source.phoneNumber,
+      gender: source.gender,
       email: source.email,
-      birthDate: source.birthDate.getTime(),
+      birthDate: isNaN(birthDate) ? 0 : birthDate,
       address: this.addressMapper.unmap(source.address),
     };
   }
