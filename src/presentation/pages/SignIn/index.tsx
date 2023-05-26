@@ -34,6 +34,7 @@ import DomainTypes from "../../../domain/di/DomainTypes";
 import { AdditionalUserInfo } from "@firebase/auth";
 import AddPatientUseCase from "../../../domain/usecases/patient/AddPatientUseCase";
 import Patient from "../../../domain/entities/Patient";
+import { Gender } from "../../../domain/Gender";
 
 const auth = container.get<Auth>(DataTypes.Auth);
 const HOME_ROUTE = "/home";
@@ -112,6 +113,7 @@ export default function SignIn(): JSX.Element {
       "",
       "",
       "",
+      Gender.Other,
       user.email || "",
       new Date(),
       null

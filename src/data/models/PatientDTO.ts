@@ -8,6 +8,7 @@ export default interface PatientDTO {
   cpf: string;
   rg: string;
   phoneNumber: string;
+  gender: number;
   email: string;
   birthDate: number;
   address: AddressDTO | null;

@@ -5,6 +5,7 @@ import { User, createUserWithEmailAndPassword } from "@firebase/auth";
 import Patient from "../entities/Patient";
 import DomainTypes from "../di/DomainTypes";
 import type AddPatientUseCase from "./patient/AddPatientUseCase";
+import { Gender } from "../Gender";
 
 export default interface CreateAccountUseCase {
   execute(name: string, email: string, password: string): Promise<User | null>;
@@ -32,6 +33,7 @@ export class CreateAccountUseCaseImpl implements CreateAccountUseCase {
       "",
       "",
       "",
+      Gender.Other,
       email,
       new Date(),
       null

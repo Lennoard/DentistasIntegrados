@@ -7,6 +7,7 @@ const DomainTypes = {
   // Use cases
   CreateAccountUseCase: Symbol("CreateAccountUseCase"),
   AddPatientUseCase: Symbol("AddPatientUseCase"),
+  UpdatePatientUseCase: Symbol("UpdatePatientUseCase"),
   GetPatientsUseCase: Symbol("GetPatientsUseCase"),
   GetPatientUseCase: Symbol("GetPatientUseCase"),
 };
