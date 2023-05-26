@@ -1,12 +1,13 @@
-import {Container} from "inversify";
-import AddConsultationUseCase, {AddConsultationUseCaseImpl} from "../usecases/consultation/AddConsultationUseCase";
-import DomainTypes from "./DomainTypes";
-import GetConsultationsUseCase, {GetConsultationsUseCaseImpl} from "../usecases/consultation/GetConsultationsUseCase";
-import GetConsultationUseCase, {GetConsultationUseCaseImpl} from "../usecases/consultation/GetConsultationUseCase";
-import AddPatientUseCase, {AddPatientUseCaseImpl} from "../usecases/patient/AddPatientUseCase";
-import GetPatientsUseCase, {GetPatientsUseCaseImpl} from "../usecases/patient/GetPatientsUseCase";
-import GetPatientUseCase, {GetPatientUseCaseImpl} from "../usecases/patient/GetPatientUseCase";
+import { Container } from "inversify";
 import CreateAccountUseCase, { CreateAccountUseCaseImpl } from "../usecases/CreateAccountUseCase";
+import AddConsultationUseCase, { AddConsultationUseCaseImpl } from "../usecases/consultation/AddConsultationUseCase";
+import GetConsultationUseCase, { GetConsultationUseCaseImpl } from "../usecases/consultation/GetConsultationUseCase";
+import GetConsultationsUseCase, { GetConsultationsUseCaseImpl } from "../usecases/consultation/GetConsultationsUseCase";
+import AddPatientUseCase, { AddPatientUseCaseImpl } from "../usecases/patient/AddPatientUseCase";
+import GetPatientUseCase, { GetPatientUseCaseImpl } from "../usecases/patient/GetPatientUseCase";
+import GetPatientsUseCase, { GetPatientsUseCaseImpl } from "../usecases/patient/GetPatientsUseCase";
+import UpdatePatientUseCase, { UpdatePatientUseCaseImpl } from "../usecases/patient/UpdatePatientUseCase";
+import DomainTypes from "./DomainTypes";
 
 const domainContainer = new Container();
 
@@ -16,6 +17,7 @@ domainContainer.bind<GetConsultationsUseCase>(DomainTypes.GetConsultationsUseCas
 domainContainer.bind<GetConsultationUseCase>(DomainTypes.GetConsultationUseCase).to(GetConsultationUseCaseImpl);
 domainContainer.bind<CreateAccountUseCase>(DomainTypes.CreateAccountUseCase).to(CreateAccountUseCaseImpl);
 domainContainer.bind<AddPatientUseCase>(DomainTypes.AddPatientUseCase).to(AddPatientUseCaseImpl);
+domainContainer.bind<UpdatePatientUseCase>(DomainTypes.UpdatePatientUseCase).to(UpdatePatientUseCaseImpl);
 domainContainer.bind<GetPatientsUseCase>(DomainTypes.GetPatientsUseCase).to(GetPatientsUseCaseImpl);
 domainContainer.bind<GetPatientUseCase>(DomainTypes.GetPatientUseCase).to(GetPatientUseCaseImpl);
 
