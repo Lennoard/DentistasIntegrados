@@ -14,9 +14,12 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DrawerItem } from "./DrawerItem";
+import logo from "./../../images/logo.png";
 
 import "./style.css";
 import { primaryDark } from "../../theme/pallete";
+
+const HOME_ROUTE = "/home";
 
 const drawerWidth = 320;
 
@@ -26,7 +29,7 @@ const defaultItems = [
     route: "/home",
   } as DrawerItem,
   {
-    title: "Perfil",
+    title: "Cadastro",
     route: "/perfil",
   } as DrawerItem,
   {
@@ -112,17 +115,27 @@ export default function AppDrawer(props: DrawerProps) {
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, mt: 4, display: { lg: "none" } }}
+              sx={{ mr: 2, mt: 2, display: { lg: "none" } }}
             >
               <MenuIcon />
             </IconButton>
-            <Typography marginTop="32px" textAlign="center" variant="h4" flexGrow={1} color={primaryDark} >
-              {props.title}
-            </Typography>
+            <Box sx={{ width: "100%" }} display="flex" alignItems="center">
+              <Typography
+                marginTop="16px"
+                textAlign="center"
+                variant="h4"
+                flexGrow={1}
+                color={primaryDark}
+              >
+                {props.title}
+              </Typography>
+              <img onClick={() => {navigate(HOME_ROUTE)}} style={{ cursor: "pointer" }} width="42px" height="42px" src={logo} alt="Logo" />
+            </Box>
             {props.filters}
           </Toolbar>
         </AppBar>
       </HideOnScroll>
+
       <Box
         component="nav"
         sx={{ width: { lg: drawerWidth }, flexShrink: { sm: 0 } }}
