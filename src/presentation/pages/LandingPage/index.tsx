@@ -16,6 +16,9 @@ import flavio from "./images/flavio.png";
 import nath from "./images/nathalia.png";
 import fred from "./images/fred.png";
 import logo from "./images/logo2.jpeg";
+import container from "../../../config/inversify.config";
+import { Auth } from "@firebase/auth";
+import DataTypes from "../../../data/di/DataTypes";
 
 export default function LandingPage(): JSX.Element {
   document.body.style.background = "#e9e9e9";
@@ -33,6 +36,7 @@ export default function LandingPage(): JSX.Element {
 
 const Splash = (): JSX.Element => {
   const navigate = useNavigate();
+  const auth = container.get<Auth>(DataTypes.Auth);
 
   return (
     <Box className="l1">
@@ -74,7 +78,11 @@ const Splash = (): JSX.Element => {
             variant="contained"
             sx={{ marginTop: "16px" }}
             onClick={() => {
-              navigate("/nova-consulta");
+              if (auth.currentUser != null) {
+                navigate("/nova-consulta");
+              } else {
+                navigate("/login?next=nova-consulta");
+              }
             }}
           >
             Marque sua consulta
