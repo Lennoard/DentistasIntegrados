@@ -22,7 +22,7 @@ import AppDrawer from "../../../components/AppDrawer";
 import ToastMessage from "../../../utils/ToastMessage";
 import UpdatePatientUseCase from "../../../../domain/usecases/patient/UpdatePatientUseCase";
 import moment from "moment";
-import dayjs, { Dayjs } from "dayjs";
+import showLocalizedAuthError from "../../../../utils/auth/AuthError";
 
 interface ProfileUpdateFields {
   birthDate: string;
@@ -146,25 +146,36 @@ export default function EditProfile(): JSX.Element {
         return;
       }
 
-      getPatientUseCase.execute(auth.currentUser?.uid || "").then((patient) => {
-        setLoading(false);
-        setPatient(patient);
-        setProfileUpdateFields({
-          ...profileUpdateFields,
-          rg: patient?.rg || "",
-          cpf: patient?.cpf || "",
-          birthDate: moment(patient?.birthDate).format("DD/MM/YYYY"),
-          phoneNumber: patient?.phoneNumber || "",
-          gender: patient?.gender || Gender.Other,
-          location: patient?.address?.location || "",
-          neighborhood: patient?.address?.neighborhood || "",
-          number: patient?.address?.number?.toString() || "",
-          city: patient?.address?.city || "",
-          federationUnit: patient?.address?.federationUnit || "",
-          country: patient?.address?.country || "",
+      getPatientUseCase
+        .execute(auth.currentUser?.uid || "")
+        .then((patient) => {
+          setLoading(false);
+          setPatient(patient);
+          setProfileUpdateFields({
+            ...profileUpdateFields,
+            rg: patient?.rg || "",
+            cpf: patient?.cpf || "",
+            birthDate: moment(patient?.birthDate).format("DD/MM/YYYY"),
+            phoneNumber: patient?.phoneNumber || "",
+            gender: patient?.gender || Gender.Other,
+            location: patient?.address?.location || "",
+            neighborhood: patient?.address?.neighborhood || "",
+            number: patient?.address?.number?.toString() || "",
+            city: patient?.address?.city || "",
+            federationUnit: patient?.address?.federationUnit || "",
+            country: patient?.address?.country || "",
+          });
+        })
+        .catch((e) => {
+          setToast({
+            showing: true,
+            message: `Falha ao buscar dados do cadastro: ${showLocalizedAuthError(
+              e.message
+            )}`,
+          });
         });
-      });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -361,14 +372,17 @@ export default function EditProfile(): JSX.Element {
             />
           </Grid>
         </Grid>
-        <LoadingButton
-          loading={loading}
-          variant="contained"
-          sx={{ minWidth: "120px", margin: "36px auto" }}
-          onClick={(e) => handleSendClick(e)}
-        >
-          Salvar
-        </LoadingButton>
+        <Grid item xs={12} mt={4} display="flex" justifyContent="center">
+          <LoadingButton
+            loading={loading}
+            variant="contained"
+            sx={{ minWidth: "120px", margin: "36px auto" }}
+            onClick={(e) => handleSendClick(e)}
+          >
+            Salvar
+          </LoadingButton>
+        </Grid>
+
         <Snackbar
           open={toast.showing}
           autoHideDuration={3000}
