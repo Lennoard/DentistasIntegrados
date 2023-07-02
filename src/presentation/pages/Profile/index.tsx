@@ -1,5 +1,7 @@
-import { Auth } from "@firebase/auth";
+import { Auth, User } from "@firebase/auth";
 import {
+  Avatar,
+  Box,
   Button,
   Container,
   Grid,
@@ -21,8 +23,8 @@ import genderAsString from "../../../domain/Gender";
 
 export default function EditProfile(): JSX.Element {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
   const [patient, setPatient] = useState<Patient | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [toast, setToast] = useState<ToastMessage>({
     showing: false,
     message: "Falha ao buscar dados",
@@ -41,24 +43,9 @@ export default function EditProfile(): JSX.Element {
     setToast({ ...toast, showing: false });
   };
 
-  const handleSendClick = async (
-    e: React.MouseEvent<HTMLButtonElement> | null
-  ) => {
-    e?.preventDefault();
-
-    if (patient == null) {
-      setToast({
-        showing: true,
-        message: "Falha ao salvar",
-      });
-      return;
-    }
-
-    setLoading(true);
-  };
-
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
+      setUser(user);
       if (!user) {
         navigate("/login", { replace: true });
         return;
@@ -67,7 +54,6 @@ export default function EditProfile(): JSX.Element {
       getPatientUseCase
         .execute(user.uid || "")
         .then((patient) => {
-          setLoading(false);
           setPatient(patient);
         })
         .catch((e) => {
@@ -79,12 +65,34 @@ export default function EditProfile(): JSX.Element {
           });
         });
     });
-  }, [auth, getPatientUseCase, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <AppDrawer title="Cadastro" selectedIndex={1}>
       <Container>
         <Grid container spacing={2} rowSpacing={3}>
+          <Grid
+            item
+            xs={12}
+            sx={{ display: { md: "flex", lg: "none" } }}
+            justifyContent="center"
+          >
+            <Box pb={4}>
+              <Avatar
+                src={user?.photoURL || ""}
+                sx={{ width: 80, height: 80, margin: "auto" }}
+              />
+              <Typography variant="h5" marginTop="8px" textAlign="center">
+                {user?.displayName
+                  ? user?.displayName
+                  : user?.email?.split("@")[0]}
+              </Typography>
+              <Typography variant="body1" textAlign="center" noWrap>
+                {user?.email}
+              </Typography>
+            </Box>
+          </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6">Data de nascimento</Typography>
             <Typography variant="body2">

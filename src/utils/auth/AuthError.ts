@@ -22,6 +22,10 @@ export const showLocalizedAuthError = (message: string): string => {
   if (message.includes("requires-recent-login")) {
     return "Por favor, faça login novamente";
   }
+  
+  if (message.includes("Quota")) {
+    return "Falha no sistema. Favor entrar em contato com o adminstrador.";
+  }
 
   return "Falha de autenticação";
 }
