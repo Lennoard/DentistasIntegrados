@@ -10,6 +10,9 @@ import FirestoreConverter from "../FirestoreConverter";
 import ConsultationDataSource from "./ConsultationDataSource";
 import {inject, injectable} from "inversify";
 import DataTypes from "../../di/DataTypes";
+import Question from "../../../domain/entities/consultation/Question";
+import QuestionDTO from "../../models/consultation/QuestionDTO";
+import QuestionMapper from "../../mappers/consultation/QuestionMapper";
 
 @injectable()
 export default class ConsultationFirestoreDataSource
@@ -18,8 +21,23 @@ export default class ConsultationFirestoreDataSource
   constructor(
     @inject(DataTypes.Auth) private auth: Auth,
     @inject(DataTypes.Firestore) private firestore: Firestore,
-    @inject(DataTypes.ConsultationMapper) private consultationMapper: ConsultationMapper
+    @inject(DataTypes.ConsultationMapper) private consultationMapper: ConsultationMapper,
+    @inject(DataTypes.QuestionMapper) private questionMapper: QuestionMapper
   ) {}
+
+  async getQuestions(): Promise<Question[]> {
+    const questions = new Array<Question>();
+    let q = query(this.getQuestionCollectionRef());
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      questions.push(
+        this.questionMapper.map({ ...doc.data(), id: doc.id })
+      );
+    });
+
+    return questions;
+  }
 
   async addConsultation(consultation: Consultation): Promise<void> {
     const docRef = this.getDocRef(consultation.id);
@@ -75,6 +93,14 @@ export default class ConsultationFirestoreDataSource
     };
   }
 
+  getQuestionConverter(): FirestoreConverter<QuestionDTO> {
+    return {
+      toFirestore: (data: QuestionDTO) => data,
+      fromFirestore: (snap: QueryDocumentSnapshot) =>
+        snap.data() as QuestionDTO,
+    };
+  }
+
   getDocRef(docId: string) {
     return doc(
       this.firestore,
@@ -90,5 +116,13 @@ export default class ConsultationFirestoreDataSource
     ).withConverter(this.getConverter());
   }
 
+  getQuestionCollectionRef() {
+    return collection(
+      this.firestore,
+      this.COLLECTION_QUESTIONS
+    ).withConverter(this.getQuestionConverter());
+  }
+
   private COLLECTION_CONSULTATIONS = `consultations`;
+  private COLLECTION_QUESTIONS = `anamnesis`;
 }

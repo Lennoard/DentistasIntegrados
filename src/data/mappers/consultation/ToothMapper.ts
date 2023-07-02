@@ -11,6 +11,9 @@ export default class ToothMapper implements IMapper<ToothDTO, Tooth> {
   }
 
   unmap(source: Tooth): ToothDTO {
-    return source;
+    return {
+      number: source.number,
+      procedure: source.procedure
+    } as ToothDTO;
   }
 }

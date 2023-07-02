@@ -10,6 +10,7 @@ const DomainTypes = {
   UpdatePatientUseCase: Symbol("UpdatePatientUseCase"),
   GetPatientsUseCase: Symbol("GetPatientsUseCase"),
   GetPatientUseCase: Symbol("GetPatientUseCase"),
+  GetQuestionsUseCase: Symbol("GetQuestionsUseCase"),
 };
 
 export default DomainTypes;

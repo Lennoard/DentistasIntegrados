@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -19,7 +18,7 @@ import logo from "./../../images/logo.png";
 import "./style.css";
 import { primaryDark } from "../../theme/pallete";
 
-const HOME_ROUTE = "/home";
+const LANDING_PAGE_ROUTE = "/";
 
 const drawerWidth = 320;
 
@@ -34,7 +33,7 @@ const defaultItems = [
   } as DrawerItem,
   {
     title: "Marcar consulta",
-    route: "/nova-consulta",
+    route: "/consultas/nova",
   } as DrawerItem,
   {
     title: "Consultas",
@@ -129,7 +128,7 @@ export default function AppDrawer(props: DrawerProps) {
               >
                 {props.title}
               </Typography>
-              <img onClick={() => {navigate(HOME_ROUTE)}} style={{ cursor: "pointer" }} width="42px" height="42px" src={logo} alt="Logo" />
+              <img onClick={() => {navigate(LANDING_PAGE_ROUTE)}} style={{ cursor: "pointer" }} width="42px" height="42px" src={logo} alt="Logo" />
             </Box>
             {props.filters}
           </Toolbar>

@@ -5,6 +5,7 @@ import SignUp from "./presentation/pages/SignUp";
 import Home from "./presentation/pages/Home";
 import Profile from "./presentation/pages/Profile";
 import EditProfile from "./presentation/pages/Profile/Edit";
+import NewConsultation from "./presentation/pages/Consultation/NewConsultation";
 
 export const AppRoutes = () => {
   return (
@@ -17,6 +18,10 @@ export const AppRoutes = () => {
         <Route path="perfil">
           <Route index={true} element={<Profile />} />
           <Route path="editar" element={<EditProfile />} />
+        </Route>
+        <Route path="consultas">
+          <Route index={true} element={<h1>Consultas!</h1>} />
+          <Route path="nova" element={<NewConsultation />} />
         </Route>
       </Routes>
     </BrowserRouter>

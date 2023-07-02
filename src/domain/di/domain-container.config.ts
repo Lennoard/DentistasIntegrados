@@ -3,6 +3,7 @@ import CreateAccountUseCase, { CreateAccountUseCaseImpl } from "../usecases/Crea
 import AddConsultationUseCase, { AddConsultationUseCaseImpl } from "../usecases/consultation/AddConsultationUseCase";
 import GetConsultationUseCase, { GetConsultationUseCaseImpl } from "../usecases/consultation/GetConsultationUseCase";
 import GetConsultationsUseCase, { GetConsultationsUseCaseImpl } from "../usecases/consultation/GetConsultationsUseCase";
+import GetQuestionsUseCase, { GetQuestionsUseCaseImpl } from "../usecases/consultation/GetQuestionsUseCase";
 import AddPatientUseCase, { AddPatientUseCaseImpl } from "../usecases/patient/AddPatientUseCase";
 import GetPatientUseCase, { GetPatientUseCaseImpl } from "../usecases/patient/GetPatientUseCase";
 import GetPatientsUseCase, { GetPatientsUseCaseImpl } from "../usecases/patient/GetPatientsUseCase";
@@ -20,5 +21,6 @@ domainContainer.bind<AddPatientUseCase>(DomainTypes.AddPatientUseCase).to(AddPat
 domainContainer.bind<UpdatePatientUseCase>(DomainTypes.UpdatePatientUseCase).to(UpdatePatientUseCaseImpl);
 domainContainer.bind<GetPatientsUseCase>(DomainTypes.GetPatientsUseCase).to(GetPatientsUseCaseImpl);
 domainContainer.bind<GetPatientUseCase>(DomainTypes.GetPatientUseCase).to(GetPatientUseCaseImpl);
+domainContainer.bind<GetQuestionsUseCase>(DomainTypes.GetQuestionsUseCase).to(GetQuestionsUseCaseImpl);
 
 export default domainContainer;
