@@ -79,9 +79,9 @@ const Splash = (): JSX.Element => {
             sx={{ marginTop: "16px" }}
             onClick={() => {
               if (auth.currentUser != null) {
-                navigate("/nova-consulta");
+                navigate("/consultas/nova");
               } else {
-                navigate("/login?next=nova-consulta");
+                navigate("/login?next=consultas/nova");
               }
             }}
           >
@@ -96,12 +96,13 @@ const Splash = (): JSX.Element => {
 const MeetOurProfessionals = (): JSX.Element => {
   return (
     <Grid container sx={{ backgroundColor: primaryDark }}>
-      <Grid xs={12} p={4} display="flex" justifyContent="center">
+      <Grid item xs={12} p={4} display="flex" justifyContent="center">
         <Typography color="white" variant="h4" marginTop={2}>
           Conheça nossos profissionais
         </Typography>
       </Grid>
       <Grid
+        item
         xs={12}
         sm={6}
         lg={4}
@@ -133,6 +134,7 @@ const MeetOurProfessionals = (): JSX.Element => {
         </Typography>
       </Grid>
       <Grid
+        item
         xs={12}
         sm={6}
         lg={4}
@@ -164,6 +166,7 @@ const MeetOurProfessionals = (): JSX.Element => {
         </Typography>
       </Grid>
       <Grid
+        item
         xs={12}
         sm={6}
         lg={4}
@@ -244,12 +247,13 @@ const WhyChooseUs = (): JSX.Element => {
 const Feedbacks = (): JSX.Element => {
   return (
     <Grid container sx={{ backgroundColor: primaryDark }}>
-      <Grid xs={12} p={4}>
+      <Grid item xs={12} p={4}>
         <Typography color="white" textAlign="center" variant="h4" marginTop={4}>
           Feedbacks
         </Typography>
       </Grid>
       <Grid
+        item
         xs={12}
         sm={6}
         lg={4}
@@ -285,6 +289,7 @@ const Feedbacks = (): JSX.Element => {
         </Box>
       </Grid>
       <Grid
+        item
         xs={12}
         sm={6}
         lg={4}
@@ -320,6 +325,7 @@ const Feedbacks = (): JSX.Element => {
         </Box>
       </Grid>
       <Grid
+        item
         xs={12}
         sm={6}
         lg={4}

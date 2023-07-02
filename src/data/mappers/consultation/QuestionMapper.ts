@@ -6,8 +6,10 @@ import { injectable } from "inversify";
 
 @injectable()
 export default class QuestionMapper implements IMapper<QuestionDTO, Question> {
+
   map(source: QuestionDTO): Question {
     return new Question(
+      source.id,
       source.question,
       source.answer,
       source.data,
@@ -17,6 +19,13 @@ export default class QuestionMapper implements IMapper<QuestionDTO, Question> {
   }
 
   unmap(source: Question): QuestionDTO {
-    return source;
+    return {
+      id: source.id,
+      question: source.question,
+      answer: source.answer,
+      data: source.data,
+      questionChoices: source.questionChoices,
+      questionType: source.questionType,
+    } as QuestionDTO;
   }
 }

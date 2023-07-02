@@ -26,6 +26,6 @@ export default class TreatmentMapper implements IMapper<TreatmentDTO, Treatment>
       paymentAmount: source.paymentAmount,
       paymentDate: source.paymentDate.getTime(),
       value: source.value,
-    };
+    } as TreatmentDTO;
   }
 }
