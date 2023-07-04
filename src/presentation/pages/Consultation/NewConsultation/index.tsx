@@ -15,20 +15,26 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import container from "../../../../config/inversify.config";
 import DataTypes from "../../../../data/di/DataTypes";
+import { ConsultationStatus } from "../../../../domain/ConsultationStatus";
+import { QuestionType } from "../../../../domain/ConsultationType";
 import DomainTypes from "../../../../domain/di/DomainTypes";
 import Patient from "../../../../domain/entities/Patient";
-import GetPatientUseCase from "../../../../domain/usecases/patient/GetPatientUseCase";
-import AppDrawer from "../../../components/AppDrawer";
-import ToastMessage from "../../../utils/ToastMessage";
-import showLocalizedAuthError from "../../../../utils/auth/AuthError";
-import GetQuestionsUseCase from "../../../../domain/usecases/consultation/GetQuestionsUseCase";
+import Consultation from "../../../../domain/entities/consultation/Consultation";
+import Odontogram from "../../../../domain/entities/consultation/Odontogram";
 import Question from "../../../../domain/entities/consultation/Question";
-import { QuestionType } from "../../../../domain/ConsultationType";
+import AddConsultationUseCase from "../../../../domain/usecases/consultation/AddConsultationUseCase";
+import GetQuestionsUseCase from "../../../../domain/usecases/consultation/GetQuestionsUseCase";
+import GetPatientUseCase from "../../../../domain/usecases/patient/GetPatientUseCase";
+import showLocalizedAuthError from "../../../../utils/auth/AuthError";
+import AppDrawer from "../../../components/AppDrawer";
 import { primaryMain } from "../../../theme/pallete";
+import ToastMessage from "../../../utils/ToastMessage";
 
 export default function NewConsultation(): JSX.Element {
   const navigate = useNavigate();
   const [patient, setPatient] = useState<Patient | null>(null);
+  const [buttonEnabled, setButtonEnabled] = useState<boolean>(false);
+  const [mainComplaint, setComplaint] = useState<string>("");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [toast, setToast] = useState<ToastMessage>({
     showing: false,
@@ -41,6 +47,9 @@ export default function NewConsultation(): JSX.Element {
   const getQuestionsUseCase = container.get<GetQuestionsUseCase>(
     DomainTypes.GetQuestionsUseCase
   );
+  const addConsultationUseCase = container.get<AddConsultationUseCase>(
+    DomainTypes.AddConsultationUseCase
+  );
   const auth = container.get<Auth>(DataTypes.Auth);
 
   const handleToastClose = (
@@ -49,6 +58,53 @@ export default function NewConsultation(): JSX.Element {
   ) => {
     if (reason === "clickaway") return;
     setToast({ ...toast, showing: false });
+  };
+
+  const updateQuestionAnswer = (questionId: string, answer: any) => {
+    const index = questions.findIndex((it) => it.id === questionId);
+    questions[index].answer = answer;
+    setQuestions(questions);
+  };
+
+  const updateQuestionData = (questionId: string, data: string) => {
+    const index = questions.findIndex((it) => it.id === questionId);
+    questions[index].data = data;
+    setQuestions(questions);
+  };
+
+  const checkFields = () => {
+    setButtonEnabled(
+      mainComplaint.length > 0 &&
+        questions.find((it) => it.answer == null) == null
+    );
+  };
+
+  const saveConsultation = () => {
+    const consultation = new Consultation(
+      "",
+      patient?.id || "",
+      new Odontogram([], ""),
+      [],
+      [],
+      mainComplaint,
+      new Date(),
+      ConsultationStatus.Requested
+    );
+
+    addConsultationUseCase.execute(consultation).then(() => {
+      setToast({
+        showing: true,
+        message: "Consulta requisitada!",
+      });
+    }).catch((e) => {
+      console.log(e);
+      setToast({
+        showing: true,
+        message: `Falha ao salvar consulta: ${showLocalizedAuthError(
+          e.message
+        )}`,
+      });
+    });
   };
 
   useEffect(() => {
@@ -92,21 +148,64 @@ export default function NewConsultation(): JSX.Element {
   return (
     <AppDrawer title="Marcar consulta" selectedIndex={2}>
       <Container>
+        <Typography
+          color={primaryMain}
+          variant="h4"
+          mb={2}
+          sx={{ borderBottom: "1px solid #CCC" }}
+        >
+          Queixas
+        </Typography>
         <Grid container spacing={4} rowSpacing={4}>
-        <Typography color={primaryMain} variant="h5">Anamese</Typography>
+          <Grid item xs={12} sm={6} md={6} lg={4}>
+            <Typography variant="h6">Queixa principal</Typography>
+            <TextField
+              margin="dense"
+              fullWidth={true}
+              sx={{
+                marginTop: "4px",
+                marginBottom: "32px",
+                minWidth: "300px",
+              }}
+              key="complaint"
+              value={mainComplaint}
+              onChange={(event) => {
+                setComplaint(event.target.value);
+                checkFields();
+              }}
+            />
+          </Grid>
+        </Grid>
+
+        <Typography
+          mb={2}
+          color={primaryMain}
+          variant="h4"
+          sx={{ borderBottom: "1px solid #CCC" }}
+        >
+          Anamnese
+        </Typography>
+        <Grid container spacing={4} rowSpacing={4}>
           {questions.map((question) => (
-            <QuestionGrid key={question.id} question={question} />
+            <QuestionGrid
+              key={question.id}
+              question={question}
+              checkFn={checkFields}
+              updateDataFn={updateQuestionData}
+              updateAnswerFn={updateQuestionAnswer}
+            />
           ))}
           <Grid item xs={12} mt={4} display="flex" justifyContent="center">
             <Button
               size="large"
               variant="contained"
-              sx={{ marginTop: "16px" }}
+              disabled={!buttonEnabled}
+              sx={{ marginY: "16px" }}
               onClick={() => {
-                navigate("/perfil/editar");
+                saveConsultation();
               }}
             >
-              Atualizar cadastro
+              Marcar consulta
             </Button>
           </Grid>
         </Grid>
@@ -123,19 +222,40 @@ export default function NewConsultation(): JSX.Element {
 
 function QuestionGrid(props: QuestionGridProps) {
   const question = props.question;
+  const [questionAnswer, setQuestionAnswer] = useState<any>(
+    question.answer || ""
+  );
 
   const BoolQuestion = () => {
     return (
-      <RadioGroup row name={question.id}>
-        <FormControlLabel value={1} control={<Radio />} label="Sim" />
-        <FormControlLabel value={0} control={<Radio />} label="Não" />
+      <RadioGroup
+        row
+        name={question.id}
+        value={questionAnswer}
+        onChange={(event) => {
+          setQuestionAnswer(event.target.value);
+          props.updateAnswerFn(props.question.id, event.target.value);
+          props.checkFn();
+        }}
+      >
+        <FormControlLabel value="Sim" control={<Radio />} label="Sim" />
+        <FormControlLabel value="Não" control={<Radio />} label="Não" />
       </RadioGroup>
     );
   };
 
   const CustomQuestion = () => {
     return (
-      <RadioGroup row name={question.id}>
+      <RadioGroup
+        row
+        name={question.id}
+        value={questionAnswer}
+        onChange={(event) => {
+          setQuestionAnswer(event.target.value);
+          props.updateAnswerFn(props.question.id, event.target.value);
+          props.checkFn();
+        }}
+      >
         {question.questionChoices?.map((choice) => (
           <FormControlLabel
             key={choice}
@@ -163,7 +283,10 @@ function QuestionGrid(props: QuestionGridProps) {
         margin="dense"
         fullWidth={true}
         sx={{ marginY: "4px" }}
-        onChange={(event) => {}}
+        onChange={(event) => {
+          props.updateDataFn(props.question.id, event.target.value);
+          props.checkFn();
+        }}
       />
     </Grid>
   );
@@ -171,4 +294,7 @@ function QuestionGrid(props: QuestionGridProps) {
 
 interface QuestionGridProps {
   question: Question;
+  updateAnswerFn: (questionId: string, answer: any) => void;
+  updateDataFn: (questionId: string, data: string) => void;
+  checkFn: () => void;
 }
