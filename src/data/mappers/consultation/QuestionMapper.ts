@@ -11,9 +11,9 @@ export default class QuestionMapper implements IMapper<QuestionDTO, Question> {
     return new Question(
       source.id,
       source.question,
-      source.answer,
-      source.data,
-      source.questionChoices,
+      source.answer === undefined ? null : source.answer,
+      source.data === undefined ? null : source.data,
+      source.questionChoices === undefined ? null : source.questionChoices,
       source.questionType
     );
   }

@@ -3,7 +3,7 @@ import Consultation from "../../../domain/entities/consultation/Consultation";
 import {ConsultationStatus} from "../../../domain/ConsultationStatus";
 import type {Auth} from "@firebase/auth";
 import {Firestore, QueryDocumentSnapshot, setDoc} from "@firebase/firestore";
-import {collection, doc, getDoc, getDocs, query, where,} from "firebase/firestore";
+import {collection, doc, addDoc, getDoc, getDocs, query, where,} from "firebase/firestore";
 import ConsultationDTO from "../../models/consultation/ConsultationDTO";
 import IFirestoreDataSource from "../IFirestoreDataSource";
 import FirestoreConverter from "../FirestoreConverter";
@@ -40,9 +40,8 @@ export default class ConsultationFirestoreDataSource
   }
 
   async addConsultation(consultation: Consultation): Promise<void> {
-    const docRef = this.getDocRef(consultation.id);
-    const { id: _, ...dto } = this.consultationMapper.unmap(consultation);
-    return await setDoc(docRef, dto);
+    const { id: _, ...dto } = this.consultationMapper.unmap(consultation);  
+    await addDoc(this.getCollectionRef(), dto)
   }
 
   async getConsultation(id: string): Promise<Consultation | null> {
