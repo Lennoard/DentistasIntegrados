@@ -35,22 +35,10 @@ import { AdditionalUserInfo } from "@firebase/auth";
 import AddPatientUseCase from "../../../domain/usecases/patient/AddPatientUseCase";
 import Patient from "../../../domain/entities/Patient";
 import { Gender } from "../../../domain/Gender";
+import { dialogStyle } from "../../theme/theme";
 
 const auth = container.get<Auth>(DataTypes.Auth);
 const HOME_ROUTE = "/home";
-
-const dialogStyle = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  borderRadius: "16px",
-  width: "30%",
-  minWidth: "400px",
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-};
 
 interface AuthCredential {
   email: string;

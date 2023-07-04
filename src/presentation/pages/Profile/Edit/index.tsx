@@ -129,6 +129,17 @@ export default function EditProfile(): JSX.Element {
           showing: true,
           message: "Cadastro atualizado!",
         });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        console.log("next", urlParams.get("next"));
+        console.log("params", urlParams);
+        const newConsultation = urlParams.get("next") === "new-consultation";
+
+        if (newConsultation) {
+          setTimeout(() => {
+            navigate("/consultas/nova");
+          }, 2300);
+        }
       })
       .catch((e) => {
         setLoading(false);

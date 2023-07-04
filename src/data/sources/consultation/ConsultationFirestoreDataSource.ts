@@ -2,7 +2,7 @@ import ConsultationMapper from "../../mappers/consultation/ConsultationMapper";
 import Consultation from "../../../domain/entities/consultation/Consultation";
 import {ConsultationStatus} from "../../../domain/ConsultationStatus";
 import type {Auth} from "@firebase/auth";
-import {Firestore, QueryDocumentSnapshot, setDoc} from "@firebase/firestore";
+import {Firestore, QueryDocumentSnapshot} from "@firebase/firestore";
 import {collection, doc, addDoc, getDoc, getDocs, query, where,} from "firebase/firestore";
 import ConsultationDTO from "../../models/consultation/ConsultationDTO";
 import IFirestoreDataSource from "../IFirestoreDataSource";
