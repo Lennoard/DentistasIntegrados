@@ -1,9 +1,11 @@
-import { Auth } from "@firebase/auth";
+import { Auth, sendPasswordResetEmail } from "@firebase/auth";
 import {
+  Box,
   Button,
   Container,
   FormControlLabel,
   Grid,
+  Modal,
   Radio,
   RadioGroup,
   Snackbar,
@@ -29,9 +31,12 @@ import showLocalizedAuthError from "../../../../utils/auth/AuthError";
 import AppDrawer from "../../../components/AppDrawer";
 import { primaryMain } from "../../../theme/pallete";
 import ToastMessage from "../../../utils/ToastMessage";
+import { dialogStyle } from "../../../theme/theme";
 
 export default function NewConsultation(): JSX.Element {
   const navigate = useNavigate();
+  const [openCompleteRegistrationModal, setCompleteRegistrationModalOpen] =
+    useState(false);
   const [patient, setPatient] = useState<Patient | null>(null);
   const [buttonEnabled, setButtonEnabled] = useState<boolean>(false);
   const [mainComplaint, setComplaint] = useState<string>("");
@@ -84,27 +89,30 @@ export default function NewConsultation(): JSX.Element {
       "",
       patient?.id || "",
       new Odontogram([], ""),
-      [],
+      questions,
       [],
       mainComplaint,
       new Date(),
       ConsultationStatus.Requested
     );
 
-    addConsultationUseCase.execute(consultation).then(() => {
-      setToast({
-        showing: true,
-        message: "Consulta requisitada!",
+    addConsultationUseCase
+      .execute(consultation)
+      .then(() => {
+        setToast({
+          showing: true,
+          message: "Consulta requisitada!",
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+        setToast({
+          showing: true,
+          message: `Falha ao salvar consulta: ${showLocalizedAuthError(
+            e.message
+          )}`,
+        });
       });
-    }).catch((e) => {
-      console.log(e);
-      setToast({
-        showing: true,
-        message: `Falha ao salvar consulta: ${showLocalizedAuthError(
-          e.message
-        )}`,
-      });
-    });
   };
 
   useEffect(() => {
@@ -118,25 +126,28 @@ export default function NewConsultation(): JSX.Element {
         .execute(user.uid || "")
         .then((patient) => {
           setPatient(patient);
+          if (patient?.completedRegistration || false) {
+            getQuestionsUseCase
+              .execute()
+              .then((questions) => {
+                setQuestions(questions);
+              })
+              .catch((e) => {
+                setToast({
+                  showing: true,
+                  message: `Falha ao buscar anamnese: ${showLocalizedAuthError(
+                    e.message
+                  )}`,
+                });
+              });
+          } else {
+            setCompleteRegistrationModalOpen(true);
+          }
         })
         .catch((e) => {
           setToast({
             showing: true,
             message: `Falha ao buscar dados do cadastro: ${showLocalizedAuthError(
-              e.message
-            )}`,
-          });
-        });
-
-      getQuestionsUseCase
-        .execute()
-        .then((questions) => {
-          setQuestions(questions);
-        })
-        .catch((e) => {
-          setToast({
-            showing: true,
-            message: `Falha ao buscar anamnese: ${showLocalizedAuthError(
               e.message
             )}`,
           });
@@ -148,6 +159,36 @@ export default function NewConsultation(): JSX.Element {
   return (
     <AppDrawer title="Marcar consulta" selectedIndex={2}>
       <Container>
+        <Modal
+          open={openCompleteRegistrationModal}
+          disableEscapeKeyDown={true}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={dialogStyle} textAlign="center">
+            <Typography id="modal-modal-title" variant="h3">
+              Ops...
+            </Typography>
+            <Typography
+              id="modal-modal-description"
+              variant="subtitle1"
+              sx={{ mt: 2 }}
+            >
+              É necessário um cadastro completo para marcar uma consulta
+            </Typography>
+
+            <Button
+              variant="contained"
+              sx={{ minWidth: "120px", margin: "36px auto 8px auto" }}
+              onClick={(_) => {
+                navigate("/perfil/editar?next=new-consultation");
+              }}
+            >
+              Completar cadastro
+            </Button>
+          </Box>
+        </Modal>
+
         <Typography
           color={primaryMain}
           variant="h4"
