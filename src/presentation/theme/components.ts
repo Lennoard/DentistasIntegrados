@@ -8,6 +8,11 @@ export const appComponents: Components<Omit<Theme, "components">> = {
       root: {
         textTransform: "none",
         borderRadius: "24px",
+        "&.Mui-disabled": {
+          background: "#E9E9E9",
+          color: "#AEAEAE",
+          cursor: "not-allowed!important"
+        }
       },
       contained: {
         background: `linear-gradient(to right, ${primaryDark}, ${primaryMain})`,
