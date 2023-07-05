@@ -27,10 +27,14 @@ export default class ConsultationRepositoryImpl
     return await this.dataSource.getConsultation(id);
   }
 
-  async getConsultations(
+  async getConsultationsByStatus(
     patientId: string | null,
     status: ConsultationStatus
   ): Promise<Consultation[]> {
-    return this.dataSource.getConsultations(patientId, status);
+    return this.dataSource.getConsultationsByStatus(patientId, status);
+  }
+
+  async getConsultations(patientId: string | null): Promise<Consultation[]> {
+    return this.dataSource.getConsultations(patientId);
   }
 }

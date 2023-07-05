@@ -6,8 +6,9 @@ export default interface ConsultationDataSource {
   getQuestions: () => Promise<Question[]>;
   addConsultation: (consultation: Consultation) => Promise<void>;
   getConsultation: (id: string) => Promise<Consultation | null>;
-  getConsultations: (
+  getConsultationsByStatus: (
     patientId: string | null,
     status: ConsultationStatus
   ) => Promise<Consultation[]>;
+  getConsultations: (patientId: string | null) => Promise<Consultation[]>;
 }

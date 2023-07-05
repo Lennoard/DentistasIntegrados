@@ -5,10 +5,12 @@ import { inject, injectable } from "inversify";
 import DataTypes from "../../../data/di/DataTypes";
 
 export default interface GetConsultationsUseCase {
-  execute: (
+  executeWithStatusFilter: (
     patientId: string | null,
     status: ConsultationStatus
   ) => Promise<Consultation[]>;
+
+  execute: (patientId: string | null) => Promise<Consultation[]>;
 }
 
 @injectable()
@@ -18,10 +20,14 @@ export class GetConsultationsUseCaseImpl implements GetConsultationsUseCase {
     private repository: ConsultationRepository
   ) {}
 
-  execute(
+  executeWithStatusFilter(
     patientId: string | null,
     status: ConsultationStatus
   ): Promise<Consultation[]> {
-    return this.repository.getConsultations(patientId, status);
+    return this.repository.getConsultationsByStatus(patientId, status);
+  }
+
+  execute(patientId: string | null): Promise<Consultation[]> {
+    return this.repository.getConsultations(patientId);
   }
 }
