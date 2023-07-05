@@ -5,10 +5,11 @@ import TreatmentDTO from "./TreatmentDTO";
 export default interface ConsultationDTO {
   id: string;
   patientId: string;
+  doctorName: string | null,
   odontogram: OdontogramDTO;
   anamnesis: QuestionDTO[];
   treatments: TreatmentDTO[];
   mainComplaints: string;
-  date: number;
+  date: number | null;
   status: number;
 }

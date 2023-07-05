@@ -9,7 +9,7 @@ export const appComponents: Components<Omit<Theme, "components">> = {
         textTransform: "none",
         borderRadius: "24px",
         "&.Mui-disabled": {
-          background: "#E9E9E9",
+          background: "#E0E0E0",
           color: "#AEAEAE",
           cursor: "not-allowed!important"
         }

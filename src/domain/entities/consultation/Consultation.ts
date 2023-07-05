@@ -7,11 +7,12 @@ export default class Consultation {
   constructor(
     public id: string,
     public patientId: string,
+    public doctorName: string | null,
     public odontogram: Odontogram,
     public anamnesis: Question[],
     public treatments: Treatment[],
     public mainComplaints: string,
-    public date: Date,
+    public date: Date | null,
     public status: ConsultationStatus
   ) {}
 }
