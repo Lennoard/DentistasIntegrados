@@ -1,4 +1,4 @@
-import { Auth, sendPasswordResetEmail } from "@firebase/auth";
+import { Auth } from "@firebase/auth";
 import {
   Box,
   Button,
@@ -30,8 +30,8 @@ import GetPatientUseCase from "../../../../domain/usecases/patient/GetPatientUse
 import showLocalizedAuthError from "../../../../utils/auth/AuthError";
 import AppDrawer from "../../../components/AppDrawer";
 import { primaryMain } from "../../../theme/pallete";
-import ToastMessage from "../../../utils/ToastMessage";
 import { dialogStyle } from "../../../theme/theme";
+import ToastMessage from "../../../utils/ToastMessage";
 
 export default function NewConsultation(): JSX.Element {
   const navigate = useNavigate();
@@ -88,6 +88,7 @@ export default function NewConsultation(): JSX.Element {
     const consultation = new Consultation(
       "",
       patient?.id || "",
+      null,
       new Odontogram([], ""),
       questions,
       [],

@@ -1,14 +1,22 @@
 import ConsultationMapper from "../../mappers/consultation/ConsultationMapper";
 import Consultation from "../../../domain/entities/consultation/Consultation";
-import {ConsultationStatus} from "../../../domain/ConsultationStatus";
-import type {Auth} from "@firebase/auth";
-import {Firestore, QueryDocumentSnapshot} from "@firebase/firestore";
-import {collection, doc, addDoc, getDoc, getDocs, query, where,} from "firebase/firestore";
+import { ConsultationStatus } from "../../../domain/ConsultationStatus";
+import type { Auth } from "@firebase/auth";
+import { Firestore, QueryDocumentSnapshot } from "@firebase/firestore";
+import {
+  collection,
+  doc,
+  addDoc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import ConsultationDTO from "../../models/consultation/ConsultationDTO";
 import IFirestoreDataSource from "../IFirestoreDataSource";
 import FirestoreConverter from "../FirestoreConverter";
 import ConsultationDataSource from "./ConsultationDataSource";
-import {inject, injectable} from "inversify";
+import { inject, injectable } from "inversify";
 import DataTypes from "../../di/DataTypes";
 import Question from "../../../domain/entities/consultation/Question";
 import QuestionDTO from "../../models/consultation/QuestionDTO";
@@ -16,12 +24,13 @@ import QuestionMapper from "../../mappers/consultation/QuestionMapper";
 
 @injectable()
 export default class ConsultationFirestoreDataSource
-  implements IFirestoreDataSource<ConsultationDTO>, ConsultationDataSource {
-
+  implements IFirestoreDataSource<ConsultationDTO>, ConsultationDataSource
+{
   constructor(
     @inject(DataTypes.Auth) private auth: Auth,
     @inject(DataTypes.Firestore) private firestore: Firestore,
-    @inject(DataTypes.ConsultationMapper) private consultationMapper: ConsultationMapper,
+    @inject(DataTypes.ConsultationMapper)
+    private consultationMapper: ConsultationMapper,
     @inject(DataTypes.QuestionMapper) private questionMapper: QuestionMapper
   ) {}
 
@@ -31,17 +40,15 @@ export default class ConsultationFirestoreDataSource
 
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
-      questions.push(
-        this.questionMapper.map({ ...doc.data(), id: doc.id })
-      );
+      questions.push(this.questionMapper.map({ ...doc.data(), id: doc.id }));
     });
 
     return questions;
   }
 
   async addConsultation(consultation: Consultation): Promise<void> {
-    const { id: _, ...dto } = this.consultationMapper.unmap(consultation);  
-    await addDoc(this.getCollectionRef(), dto)
+    const { id: _, ...dto } = this.consultationMapper.unmap(consultation);
+    await addDoc(this.getCollectionRef(), dto);
   }
 
   async getConsultation(id: string): Promise<Consultation | null> {
@@ -54,7 +61,7 @@ export default class ConsultationFirestoreDataSource
     return this.consultationMapper.map(dto);
   }
 
-  async getConsultations(
+  async getConsultationsByStatus(
     patientId: string | null,
     status: ConsultationStatus
   ): Promise<Consultation[]> {
@@ -67,6 +74,27 @@ export default class ConsultationFirestoreDataSource
         this.getCollectionRef(),
         where("patientId", "==", patientId),
         statusFilter
+      );
+    }
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      consultations.push(
+        this.consultationMapper.map({ ...doc.data(), id: doc.id })
+      );
+    });
+
+    return consultations;
+  }
+
+  async getConsultations(patientId: string | null): Promise<Consultation[]> {
+    const consultations = new Array<Consultation>();
+    let q = query(this.getCollectionRef());
+
+    if (patientId != null) {
+      q = query(
+        this.getCollectionRef(),
+        where("patientId", "==", patientId)
       );
     }
 
@@ -116,10 +144,9 @@ export default class ConsultationFirestoreDataSource
   }
 
   getQuestionCollectionRef() {
-    return collection(
-      this.firestore,
-      this.COLLECTION_QUESTIONS
-    ).withConverter(this.getQuestionConverter());
+    return collection(this.firestore, this.COLLECTION_QUESTIONS).withConverter(
+      this.getQuestionConverter()
+    );
   }
 
   private COLLECTION_CONSULTATIONS = `consultations`;
