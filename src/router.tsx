@@ -7,6 +7,7 @@ import Profile from "./presentation/pages/Profile";
 import EditProfile from "./presentation/pages/Profile/Edit";
 import NewConsultation from "./presentation/pages/Consultation/NewConsultation";
 import Consultations from "./presentation/pages/Consultation";
+import ConsultationDetails from "./presentation/pages/Consultation/Details";
 
 export const AppRoutes = () => {
   return (
@@ -23,6 +24,7 @@ export const AppRoutes = () => {
         <Route path="consultas">
           <Route index={true} element={<Consultations />} />
           <Route path="nova" element={<NewConsultation />} />
+          <Route path="detalhes" element={<ConsultationDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>
