@@ -1,17 +1,16 @@
 import {
   Box,
-  Button,
   Container,
   Divider,
   Grid,
-  List,
-  ListItem,
   Modal,
   Paper,
-  Typography,
+  Typography
 } from "@mui/material";
+import { useState } from "react";
 import AppDrawer from "../../components/AppDrawer";
 import welcomeBackground from "../../images/welcome_background.jpg";
+import { dialogStyle } from "../../theme/theme";
 import "./home.css";
 import home1 from "./home1.jpg";
 import home2 from "./home2.jpg";
@@ -19,8 +18,6 @@ import home3 from "./home3.png";
 import home4 from "./home4.jpg";
 import home5 from "./home5.jpg";
 import home6 from "./home6.jpg";
-import { useState } from "react";
-import { dialogStyle } from "../../theme/theme";
 import el1 from "./images/el1.png";
 import el2 from "./images/el2.png";
 import el3 from "./images/el3.png";
