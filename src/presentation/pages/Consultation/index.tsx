@@ -171,7 +171,7 @@ function TabPanel(props: TabPanelProps) {
           {value === index.toString() &&
             (consultations.length === 0 ? (
               <Grid item xs={12}>
-                <Typography>Nanhuma consulta encontrada</Typography>
+                <Typography>Nenhuma consulta encontrada</Typography>
               </Grid>
             ) : (
               consultations.map((consultation) => (

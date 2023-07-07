@@ -1,0 +1,23 @@
+.tip-container {
+  border: 3px solid #0144a9;
+  width: 240px;
+  height: 240px;
+  cursor: pointer;
+  position: relative;
+}
+
+.tip-text {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.69);
+  position: absolute;
+  text-align: center;
+  top: 67%;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.tip-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
